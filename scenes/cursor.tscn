@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7lpkwr43ape4"]
+
+[ext_resource type="Script" path="res://scripts/cursor.gd" id="1_h1dua"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_51y5o"]
+
+[node name="Cursor" type="Area2D" groups=["cursor"]]
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("1_h1dua")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.3, 0.3)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_51y5o")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]

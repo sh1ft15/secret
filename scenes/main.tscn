@@ -1,0 +1,190 @@
+[gd_scene load_steps=15 format=3 uid="uid://bm3yot7h8v3c5"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_3doha"]
+[ext_resource type="PackedScene" uid="uid://dpdy6hqdxypsq" path="res://scenes/player.tscn" id="2_s43kx"]
+[ext_resource type="PackedScene" uid="uid://73qvg2vbt0y5" path="res://scenes/card.tscn" id="4_q73w5"]
+[ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="5_dkiys"]
+[ext_resource type="PackedScene" uid="uid://cq8nyfcvs6rxv" path="res://scenes/upgrade_screen.tscn" id="5_do4jj"]
+[ext_resource type="PackedScene" uid="uid://8ilowit2o8th" path="res://scenes/spawn_point.tscn" id="5_pmoai"]
+[ext_resource type="PackedScene" uid="uid://c7lpkwr43ape4" path="res://scenes/cursor.tscn" id="6_yw6dw"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_0vpnd"]
+vertices = PackedVector2Array(837.289, -118.828, 839, 524.297, 329.18, 631.992, -144.828, 526.852, -143.68, -109.906, 318.148, -219.258)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4, 5)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-153.674, -117.832, 317.946, -229.495, 847.268, -127.086, 849.034, 532.404, 329.133, 642.216, -154.852, 534.872)])
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5nskg"]
+bg_color = Color(0.933333, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6tj23"]
+bg_color = Color(0.972549, 0.972549, 0.92549, 1)
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+shadow_size = 3
+
+[sub_resource type="LabelSettings" id="LabelSettings_kp0ta"]
+font = ExtResource("5_dkiys")
+font_size = 50
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d1s5v"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_0lbrm"]
+font = ExtResource("5_dkiys")
+font_size = 25
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0yrx6"]
+size = Vector2(14.4813, 10.5319)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_3doha")
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+position = Vector2(14, 1)
+scale = Vector2(1.6984, 1.62095)
+navigation_polygon = SubResource("NavigationPolygon_0vpnd")
+
+[node name="Player" parent="." node_paths=PackedStringArray("heart_label", "cursor") instance=ExtResource("2_s43kx")]
+heart_label = NodePath("../CanvasLayer/HeartLabel")
+cursor = NodePath("../Cursor")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 10.0
+grow_horizontal = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/fill = SubResource("StyleBoxFlat_5nskg")
+show_percentage = false
+
+[node name="Cards" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="Card_1" parent="CanvasLayer/Cards" instance=ExtResource("4_q73w5")]
+position = Vector2(50, -15)
+
+[node name="Card_2" parent="CanvasLayer/Cards" instance=ExtResource("4_q73w5")]
+visible = false
+position = Vector2(130, -15)
+card_type = 1
+
+[node name="Card_3" parent="CanvasLayer/Cards" instance=ExtResource("4_q73w5")]
+visible = false
+position = Vector2(210, -15)
+
+[node name="GameOverScreen" type="CenterContainer" parent="CanvasLayer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -143.5
+offset_top = -34.5
+offset_right = 143.5
+offset_bottom = 34.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/GameOverScreen"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6tj23")
+
+[node name="HBoxContainer" type="VBoxContainer" parent="CanvasLayer/GameOverScreen/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="CanvasLayer/GameOverScreen/PanelContainer/HBoxContainer"]
+layout_mode = 2
+text = "GAME OVER
+"
+label_settings = SubResource("LabelSettings_kp0ta")
+
+[node name="Restart" type="Button" parent="CanvasLayer/GameOverScreen/PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_dkiys")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_d1s5v")
+text = "RESTART
+"
+
+[node name="UpgradeScreen" parent="CanvasLayer" instance=ExtResource("5_do4jj")]
+visible = false
+
+[node name="HeartLabel" type="Label" parent="CanvasLayer"]
+offset_left = 13.0
+offset_top = 10.0
+offset_right = 108.0
+offset_bottom = 46.0
+size_flags_vertical = 1
+text = "LIFE : 3"
+label_settings = SubResource("LabelSettings_0lbrm")
+
+[node name="SpawnPoints" type="Node" parent="."]
+
+[node name="SpawnPoint" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(-18, -137)
+
+[node name="SpawnPoint2" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(-135, 331)
+
+[node name="SpawnPoint3" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(-22, 776)
+
+[node name="SpawnPoint4" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(559, 907)
+
+[node name="SpawnPoint5" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(1162, 776)
+
+[node name="SpawnPoint6" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(1274, 320)
+
+[node name="SpawnPoint7" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(1166, -132)
+
+[node name="SpawnPoint8" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(547, -253)
+
+[node name="Field" type="Area2D" parent="."]
+position = Vector2(577, 323)
+scale = Vector2(0.821098, 0.723971)
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Field"]
+position = Vector2(1.21777, -38.6756)
+rotation = -3.14159
+scale = Vector2(70.1395, -47.7391)
+shape = SubResource("RectangleShape2D_0yrx6")
+
+[node name="Polygon2D" type="Polygon2D" parent="Field"]
+z_index = -1
+color = Color(0, 1, 0, 0.117647)
+polygon = PackedVector2Array(-545.611, -323.217, 539.521, -321.836, 539.521, 285.923, -544.393, 285.923)
+
+[node name="Cursor" parent="." instance=ExtResource("6_yw6dw")]
+
+[node name="DifficultyTimer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[connection signal="pressed" from="CanvasLayer/GameOverScreen/PanelContainer/HBoxContainer/Restart" to="." method="_on_restart_pressed"]
+[connection signal="input_event" from="Field" to="Cursor" method="_on_field_input_event"]
+[connection signal="timeout" from="DifficultyTimer" to="." method="_on_difficulty_timer_timeout"]

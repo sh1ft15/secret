@@ -1,0 +1,167 @@
+[gd_scene load_steps=12 format=3 uid="uid://clqcokf6lnn4a"]
+
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_a5ybt"]
+[ext_resource type="Texture2D" uid="uid://dheh6cv3gwl1" path="res://sprites/enemy_armored-Sheet.png" id="2_6bcav"]
+[ext_resource type="Texture2D" uid="uid://cj44hcc2pncwd" path="res://sprites/box.png" id="3_3vtxv"]
+[ext_resource type="LabelSettings" uid="uid://bxd4vxtolk6r0" path="res://sprites/char_num_top.tres" id="3_fd8kg"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_o6qfb"]
+radius = 39.0512
+
+[sub_resource type="Animation" id="Animation_l36wu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Base:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.4, 0.4)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Cover/Sprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -15)]
+}
+
+[sub_resource type="Animation" id="Animation_pd6y8"]
+resource_name = "hurt"
+length = 0.6
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Base:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.3, 0.3), Vector2(0.28, 0.28), Vector2(0.32, 0.32), Vector2(0.3, 0.3)]
+}
+
+[sub_resource type="Animation" id="Animation_dd3nl"]
+resource_name = "idle"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Base:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.3, 0.3)]
+}
+
+[sub_resource type="Animation" id="Animation_hkw4o"]
+resource_name = "move"
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Base:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.3, 0.3), Vector2(0.28, 0.3), Vector2(0.3, 0.3)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Cover/Sprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -15), Vector2(0, -17), Vector2(0, -15)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3u0na"]
+_data = {
+"RESET": SubResource("Animation_l36wu"),
+"hurt": SubResource("Animation_pd6y8"),
+"idle": SubResource("Animation_dd3nl"),
+"move": SubResource("Animation_hkw4o")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lvpg8"]
+size = Vector2(88, 65)
+
+[node name="Enemy" type="CharacterBody2D" groups=["enemy"]]
+input_pickable = true
+motion_mode = 1
+script = ExtResource("1_a5ybt")
+speed = 50
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_o6qfb")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+avoidance_enabled = true
+radius = 50.0
+
+[node name="Base" type="Sprite2D" parent="."]
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_6bcav")
+hframes = 5
+
+[node name="Label" type="Label" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -21.0
+offset_top = -29.0
+offset_right = 21.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0"
+label_settings = ExtResource("3_fd8kg")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_3u0na")
+}
+
+[node name="Cover" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Cover"]
+position = Vector2(0, -22.5)
+shape = SubResource("RectangleShape2D_lvpg8")
+
+[node name="Sprite" type="Sprite2D" parent="Cover"]
+position = Vector2(0, -15)
+scale = Vector2(0.32, 0.32)
+texture = ExtResource("3_3vtxv")
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]
+[connection signal="input_event" from="Cover" to="." method="_on_cover_input_event"]

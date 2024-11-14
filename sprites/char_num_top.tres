@@ -1,0 +1,9 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://bxd4vxtolk6r0"]
+
+[ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="1_vvcoe"]
+
+[resource]
+font = ExtResource("1_vvcoe")
+font_size = 50
+outline_size = 10
+outline_color = Color(0.126397, 0.0781069, 0.580579, 1)

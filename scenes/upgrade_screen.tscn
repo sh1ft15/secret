@@ -1,0 +1,151 @@
+[gd_scene load_steps=8 format=3 uid="uid://cq8nyfcvs6rxv"]
+
+[ext_resource type="Script" path="res://scripts/upgrade_screen.gd" id="1_af613"]
+[ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="1_beswm"]
+[ext_resource type="Texture2D" uid="uid://5cqnuv2ky8b7" path="res://sprites/secret.png" id="3_vnt85"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6tj23"]
+bg_color = Color(0.972549, 0.972549, 0.92549, 0.784314)
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+shadow_size = 3
+
+[sub_resource type="LabelSettings" id="LabelSettings_kp0ta"]
+font = ExtResource("1_beswm")
+font_size = 50
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_snqae"]
+font = ExtResource("1_beswm")
+font_size = 17
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d1s5v"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="SecretScreen" type="CenterContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -143.5
+offset_top = -34.5
+offset_right = 143.5
+offset_bottom = 34.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_af613")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6tj23")
+
+[node name="HBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+text = "SECRETS
+"
+label_settings = SubResource("LabelSettings_kp0ta")
+horizontal_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 6
+
+[node name="Button_1" type="Button" parent="PanelContainer/HBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/icon_max_width = 140
+icon = ExtResource("3_vnt85")
+icon_alignment = 1
+
+[node name="Title" type="Label" parent="PanelContainer/HBoxContainer/GridContainer/Button_1"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 4.0
+offset_top = -11.0
+offset_right = -4.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+label_settings = SubResource("LabelSettings_snqae")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Button_2" type="Button" parent="PanelContainer/HBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/icon_max_width = 140
+toggle_mode = true
+icon = ExtResource("3_vnt85")
+icon_alignment = 1
+
+[node name="Title" type="Label" parent="PanelContainer/HBoxContainer/GridContainer/Button_2"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 4.0
+offset_top = -11.0
+offset_right = -4.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+label_settings = SubResource("LabelSettings_snqae")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Button_3" type="Button" parent="PanelContainer/HBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/icon_max_width = 140
+icon = ExtResource("3_vnt85")
+icon_alignment = 1
+
+[node name="Title" type="Label" parent="PanelContainer/HBoxContainer/GridContainer/Button_3"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 4.0
+offset_top = -11.0
+offset_right = -4.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+label_settings = SubResource("LabelSettings_snqae")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Continue" type="Button" parent="PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_fonts/font = ExtResource("1_beswm")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_d1s5v")
+text = "CONTINUE
+"
+
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
+[connection signal="pressed" from="PanelContainer/HBoxContainer/GridContainer/Button_1" to="." method="_on_button_1_pressed"]
+[connection signal="pressed" from="PanelContainer/HBoxContainer/GridContainer/Button_2" to="." method="_on_button_2_pressed"]
+[connection signal="pressed" from="PanelContainer/HBoxContainer/GridContainer/Button_3" to="." method="_on_button_3_pressed"]
+[connection signal="pressed" from="PanelContainer/HBoxContainer/Continue" to="." method="_on_continue_pressed"]
