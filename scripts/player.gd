@@ -11,17 +11,17 @@ extends Area2D
 var is_hit = false
 var is_death = false
 
-var max_health = 5
-var health = 5
+var max_health = 6
+var health = 2
+
 var max_num = 10
 var cur_num = 0
 
+var shoot_rate = 1
+var shoot_amount = 1
+
 func _ready() -> void:
-	var viewport_size = get_viewport_rect().size
-	
 	animator.play('idle')
-	
-	position = Vector2(viewport_size.x / 2 - 20, (viewport_size.y / 2) - 20)
 	heart_label.text = 'LIFE : ' + str(health)
 
 func setNum(num):
@@ -34,6 +34,20 @@ func setNum(num):
 	updateCards()
 
 func getNum(): return cur_num
+
+func updateHealth(num):
+	health = max(min(health + num, max_health), 0)
+	heart_label.text = 'LIFE : ' + str(health)
+	
+func updateMaxPoint(num):
+	max_num = max(min(max_num + num, 30), 10)
+	
+func updateShootRate(num):
+	shoot_rate = max(min(shoot_rate + num, 5), 1)
+	bullet_timer.wait_time = max(3 - ((shoot_rate / 5) * 3), .5)
+	
+func updateShootAmount(num):
+	shoot_amount = roundi(max(min(shoot_amount + num, 4), 0))
 
 func isDeath(): return is_death
 
@@ -68,26 +82,32 @@ func updateCards():
 		card.updateAvailable(cur_num >= card.getCost())
 
 func _on_body_entered(body: Node2D) -> void:
-	if is_hit: return
+	if is_hit || is_death: return
 	if body.is_in_group('enemy'):
-		if !is_hit: 
-			health = max(health - 1, 0)
-			heart_label.text = 'LIFE : ' + str(health)
-			triggerHit()
-			
-		if health <= 0: is_death = true
+		updateHealth(-1)
+		triggerHit()
+		is_death = health <= 0
 
 func _on_bullet_timer_timeout() -> void:
 	var enemies = get_tree().get_nodes_in_group('enemy')
-	var max_dist = 500
-	var target_post
+	var target_enemies = []
 	
-	for enemy in enemies: 
-		var cur_dist = position.distance_to(enemy.position)
+	for i in shoot_amount:
+		var max_dist = 500
+		var target_enemy
 		
-		if cur_dist < max_dist && isInViewPort(enemy.position):
-			max_dist = cur_dist
-			target_post = enemy.position
+		for enemy in enemies: 
+			var cur_dist = position.distance_to(enemy.position)
 			
-	shootBullet(target_post)			
-	bullet_timer.start()
+			if target_enemies.find(enemy) != -1: continue
+			
+			if cur_dist < max_dist && isInViewPort(enemy.position):
+				max_dist = cur_dist
+				target_enemy = enemy
+		
+		if target_enemy != null: 
+			target_enemies.append(target_enemy)
+			shootBullet(target_enemy.position)
+			
+	
+	print('target count: ' + str(target_enemies.size()))

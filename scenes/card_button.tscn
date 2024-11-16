@@ -1,0 +1,70 @@
+[gd_scene load_steps=9 format=3 uid="uid://bo16ww4glu5vx"]
+
+[ext_resource type="Script" path="res://scripts/card_button.gd" id="1_p681k"]
+[ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="2_5yr25"]
+[ext_resource type="Texture2D" uid="uid://s8urmiddk3ao" path="res://sprites/secret_test.png" id="2_has6l"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0qycs"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8vwgg"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0nxit"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6jlka"]
+bg_color = Color(0.585062, 0.585062, 0.585062, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_d38uf"]
+font = ExtResource("2_5yr25")
+font_size = 18
+
+[node name="CardButton" type="Button"]
+custom_minimum_size = Vector2(230, 280)
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0qycs")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8vwgg")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0nxit")
+theme_override_styles/normal = SubResource("StyleBoxFlat_6jlka")
+icon_alignment = 1
+script = ExtResource("1_p681k")
+
+[node name="HBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("2_has6l")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+color = Color(0, 0, 0, 0.784314)
+
+[node name="Label" type="Label" parent="HBoxContainer/ColorRect"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -24.5
+offset_right = -10.0
+offset_bottom = 24.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+label_settings = SubResource("LabelSettings_d38uf")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

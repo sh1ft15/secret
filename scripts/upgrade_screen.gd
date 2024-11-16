@@ -1,49 +1,57 @@
 extends CenterContainer
 
 const secrets = [
-	# buffs
 	{
-		'slug': 'health', 'desc': 'Increase player health by 1', 
-		'sprite': null, 'cons': false
+		'slug': 'increase_health', 
+		'desc': 'Health +1', 
+		'repeatable': true,
+		'sprite': preload('res://sprites/secret_test.png')
 	},
 	{
-		'slug': 'increase_max_point', 'desc': 'Increase maximum points', 
-		'sprite': null, 'cons': false
+		'slug': 'increase_max_point', 
+		'desc': 'Max Points +1', 
+		'repeatable': true,
+		'sprite': preload('res://sprites/secret_test.png')
 	},
 	{
-		'slug': 'plank', 'desc': 'Can place a plank. It does nothing',
-		'sprite': preload("res://sprites/plank.png"), 'cons': false
+		'slug': 'increase_shoot_rate', 
+		'desc': 'Shoot Rate +1', 
+		'repeatable': true,
+		'sprite': preload('res://sprites/secret_test.png')
 	},
 	{
-		'slug': 'cactus', 'desc': 'Can place a cactus. It hurt the bugs',
-		'sprite': preload("res://sprites/cactus.png"), 'cons': false
-	},
-	# debuffs
-	{
-		'slug': 'enemy_armor', 'desc': 'Bug have more armor', 
-		'sprite': null, 'cons': true
+		'slug': 'increase_shoot_count', 
+		'desc': 'Shoot Amount +1', 
+		'repeatable': true,
+		'sprite': preload('res://sprites/leave.png')
 	},
 	{
-		'slug': 'reset_point', 'desc': 'Reset points', 
-		'sprite': null, 'cons': true
+		'slug': 'plank', 
+		'desc': 'Can place a plank. It does nothing',
+		'repeatable': false,
+		'sprite': preload("res://sprites/plank.png")
 	},
 	{
-		'slug': 'enemy_cover', 'desc': 'Bug can use cover', 
-		'sprite': preload("res://sprites/box.png"), 'cons': true
+		'slug': 'cactus', 
+		'desc': 'Can place a cactus. It hurt the bugs',
+		'repeatable': false,
+		'sprite': preload("res://sprites/cactus.png")
 	}
 ]
 
-signal continue_pressed
+signal continue_pressed(secrets)
 
-@onready var button_1 = $PanelContainer/HBoxContainer/GridContainer/Button_1
-@onready var button_2 = $PanelContainer/HBoxContainer/GridContainer/Button_2
-@onready var button_3 = $PanelContainer/HBoxContainer/GridContainer/Button_3
-@onready var secret_icon = load("res://sprites/secret.png")
+@onready var button_container = $PanelContainer/HBoxContainer/GridContainer
+@onready var default_icon = load("res://sprites/secret_test.png")
 
+var acquired_secrets = []
 var selected_secret
 var has_reveal = false
 
 func _ready() -> void:
+	for button in button_container.get_children():
+		button.connect('card_button_pressed', reveal)
+		
 	reset()
 
 func reveal(selected_button):
@@ -53,50 +61,41 @@ func reveal(selected_button):
 	
 	var temp_secrets = secrets.duplicate(true)
 	
-	for button in [button_1, button_2, button_3]:
+	# remove un-repeatable buffs
+	for secret in acquired_secrets:
+		if not secret.repeatable:
+			var index = temp_secrets.find(secret)
+			
+			if index != -1: temp_secrets.remove_at(index)
+	
+	for button in button_container.get_children():
 		var index = randi() % temp_secrets.size()
 		var secret = temp_secrets[index]
-		var color = Color.RED if secret.cons else Color.GREEN
 		
 		temp_secrets.remove_at(index)
-		
-		if secret.sprite != null:
-			button.icon = secret.sprite
+		button.disabled = true
 		
 		if button == selected_button: 
-			button.get_child(0).modulate = color
+			button.update(secret.sprite, secret.desc)
 			selected_secret = secret
-		else: 
-			color = color * 0.7
-			button.get_child(0).modulate = color
-			button.disabled = true
-		
-		button.get_node('Title').text = secret.desc
+			acquired_secrets.append(secret)
+		else:
+			button.modulate = Color.GRAY
 
 func reset():
 	has_reveal = false
+	selected_secret = null
 	
-	if button_1 != null and button_2 != null and button_3 != null:
-		for button in [button_1, button_2, button_3]:
-			button.get_child(0).text = ''
-			button.get_child(0).modulate = Color.WHITE
-			button.icon = secret_icon
-			button.disabled = false
-			# button.modulate = Color.WHITE
-
+	if button_container == null: return
+	
+	for button in button_container.get_children():
+		button.update(default_icon, '')
+		button.modulate = Color.WHITE
+		button.disabled = false
 
 func _on_continue_pressed() -> void:
-	emit_signal('continue_pressed')
-
-func _on_button_1_pressed() -> void:
-	reveal(button_1)
-
-func _on_button_2_pressed() -> void:
-	reveal(button_2)
-
-func _on_button_3_pressed() -> void:
-	reveal(button_3)
+	emit_signal('continue_pressed', selected_secret)
 
 func _on_visibility_changed() -> void:
-	if not visible: reset()
+	if visible: reset()
 		

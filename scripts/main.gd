@@ -6,8 +6,8 @@ extends Node2D
 @onready var nav_region = $NavigationRegion2D
 @onready var player = $Player
 @onready var game_over_screen = $CanvasLayer/GameOverScreen
-@onready var upgrades_screen = $CanvasLayer/UpgradeScreen
-@onready var kills_label = $CanvasLayer/HBoxContainer/ProgressBar
+@onready var upgrades_screen = $CanvasLayer/SecretScreen
+@onready var kills_label = $CanvasLayer/ProgressBar
 
 var game_over = false
 var max_enemies = 300
@@ -84,15 +84,30 @@ func onEnemyDeath():
 	kills += 1
 	kills_label.value = kills
 
-func _on_upgrades_continue_pressed() -> void:
+func applyAcquiredSkill(secret):
+	if secret == null: return
+	
+	match secret.slug:
+		'increase_health': player.updateHealth(1)
+		'increase_max_point': player.updateMaxPoint(1)
+		'increase_shoot_rate': pass
+		'increase_shoot_amount': pass
+		'cactus': pass
+		'plank': pass
+
+func _on_upgrades_continue_pressed(secret) -> void:
 	upgrades_screen.visible = false
 	game_over = false
-	max_active_enemies = 5
 	
-	required_kills += 5
+	applyAcquiredSkill(secret)
+	
+	max_active_enemies = 5
+	required_kills += 1
 	kills = 0
 	kills_label.max_value = required_kills
 	kills_label.value = kills
+		
+	
 
 func _on_restart_pressed() -> void:
 	get_tree().reload_current_scene()
