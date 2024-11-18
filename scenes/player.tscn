@@ -5,7 +5,7 @@
 [ext_resource type="LabelSettings" uid="uid://bxd4vxtolk6r0" path="res://sprites/char_num_top.tres" id="3_6npt1"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5vtr2"]
-radius = 55.0
+radius = 50.0
 
 [sub_resource type="Animation" id="Animation_wu54r"]
 length = 0.001
@@ -50,6 +50,9 @@ script = ExtResource("1_vsn0w")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2(0.756838, 0.756838)
 shape = SubResource("CircleShape2D_5vtr2")
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+radius = 20.0
 
 [node name="Icon" type="Sprite2D" parent="."]
 scale = Vector2(0.35, 0.35)

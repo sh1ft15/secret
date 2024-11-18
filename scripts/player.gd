@@ -5,7 +5,7 @@ extends Area2D
 @onready var sprite = $Icon
 @onready var animator = $AnimationPlayer
 @onready var bullet_timer = $BulletTimer
-@export var heart_label : Label
+@export var heart_container: BoxContainer
 @export var cursor : Area2D
 
 var is_hit = false
@@ -22,7 +22,7 @@ var shoot_amount = 1
 
 func _ready() -> void:
 	animator.play('idle')
-	heart_label.text = 'LIFE : ' + str(health)
+	updateHealth(0)
 
 func setNum(num):
 	if cur_num >= max_num: return
@@ -37,7 +37,9 @@ func getNum(): return cur_num
 
 func updateHealth(num):
 	health = max(min(health + num, max_health), 0)
-	heart_label.text = 'LIFE : ' + str(health)
+	
+	for i in heart_container.get_child_count():
+		heart_container.get_child(i).visible = (i + 1) <= health
 	
 func updateMaxPoint(num):
 	max_num = max(min(max_num + num, 30), 10)
@@ -108,6 +110,3 @@ func _on_bullet_timer_timeout() -> void:
 		if target_enemy != null: 
 			target_enemies.append(target_enemy)
 			shootBullet(target_enemy.position)
-			
-	
-	print('target count: ' + str(target_enemies.size()))

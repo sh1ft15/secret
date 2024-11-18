@@ -6,6 +6,7 @@
 [ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="5_dkiys"]
 [ext_resource type="PackedScene" uid="uid://cq8nyfcvs6rxv" path="res://scenes/upgrade_screen.tscn" id="5_do4jj"]
 [ext_resource type="PackedScene" uid="uid://8ilowit2o8th" path="res://scenes/spawn_point.tscn" id="5_pmoai"]
+[ext_resource type="Texture2D" uid="uid://cqw7s7pw8wwqv" path="res://sprites/circle_64.png" id="6_cdfaf"]
 [ext_resource type="PackedScene" uid="uid://c7lpkwr43ape4" path="res://scenes/cursor.tscn" id="6_yw6dw"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_0vpnd"]
@@ -33,12 +34,6 @@ outline_color = Color(0, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d1s5v"]
 bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_0lbrm"]
-font = ExtResource("5_dkiys")
-font_size = 25
-outline_size = 5
-outline_color = Color(0, 0, 0, 1)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0yrx6"]
 size = Vector2(14.4813, 10.5319)
 
@@ -51,9 +46,9 @@ position = Vector2(14, 1)
 scale = Vector2(1.6984, 1.62095)
 navigation_polygon = SubResource("NavigationPolygon_0vpnd")
 
-[node name="Player" parent="." node_paths=PackedStringArray("heart_label", "cursor") instance=ExtResource("2_s43kx")]
+[node name="Player" parent="." node_paths=PackedStringArray("heart_container", "cursor") instance=ExtResource("2_s43kx")]
 position = Vector2(577, 416)
-heart_label = NodePath("../CanvasLayer/HeartLabel")
+heart_container = NodePath("../CanvasLayer/Hearts")
 cursor = NodePath("../Cursor")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -127,14 +122,48 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_d1s5v")
 text = "RESTART
 "
 
-[node name="HeartLabel" type="Label" parent="CanvasLayer"]
-offset_left = 13.0
+[node name="Hearts" type="HBoxContainer" parent="CanvasLayer"]
+offset_left = 10.0
 offset_top = 10.0
-offset_right = 108.0
-offset_bottom = 46.0
-size_flags_vertical = 1
-text = "LIFE : 3"
-label_settings = SubResource("LabelSettings_0lbrm")
+offset_right = 225.0
+offset_bottom = 45.0
+theme_override_constants/separation = 10
+
+[node name="Heart_1" type="TextureRect" parent="CanvasLayer/Hearts"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+texture = ExtResource("6_cdfaf")
+expand_mode = 2
+
+[node name="Heart_2" type="TextureRect" parent="CanvasLayer/Hearts"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+texture = ExtResource("6_cdfaf")
+expand_mode = 2
+
+[node name="Heart_3" type="TextureRect" parent="CanvasLayer/Hearts"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+texture = ExtResource("6_cdfaf")
+expand_mode = 2
+
+[node name="Heart_4" type="TextureRect" parent="CanvasLayer/Hearts"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+texture = ExtResource("6_cdfaf")
+expand_mode = 2
+
+[node name="Heart_5" type="TextureRect" parent="CanvasLayer/Hearts"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+texture = ExtResource("6_cdfaf")
+expand_mode = 2
+
+[node name="Heart_6" type="TextureRect" parent="CanvasLayer/Hearts"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+texture = ExtResource("6_cdfaf")
+expand_mode = 2
 
 [node name="SpawnPoints" type="Node" parent="."]
 

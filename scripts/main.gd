@@ -107,8 +107,6 @@ func _on_upgrades_continue_pressed(secret) -> void:
 	kills_label.max_value = required_kills
 	kills_label.value = kills
 		
-	
-
 func _on_restart_pressed() -> void:
 	get_tree().reload_current_scene()
 
