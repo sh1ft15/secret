@@ -4,19 +4,28 @@ extends Node2D
 @onready var obstacle_prefab = load("res://scenes/obstacle.tscn")
 @onready var enemy_prefab = load("res://scenes/enemy.tscn")
 @onready var nav_region = $NavigationRegion2D
-@onready var player = $Player
 @onready var game_over_screen = $CanvasLayer/GameOverScreen
 @onready var upgrades_screen = $CanvasLayer/SecretScreen
-@onready var kills_label = $CanvasLayer/ProgressBar
+@onready var cards_container = $CanvasLayer/Cards
+@onready var kills_bar = $CanvasLayer/ProgressBar
+@onready var player = $Player
 
 var game_over = false
+
+var level = 1
+
 var max_enemies = 300
 var max_active_enemies = 5
+
 var kills = 0
-var required_kills = 10
+var required_kills = 5
+
+var enemy_max_armor = 5
+var enemy_cur_armor = 2
+var enemy_cover_rate = 0
 
 func _ready() -> void:
-	kills_label.max_value = required_kills
+	kills_bar.max_value = required_kills
 	game_over_screen.visible = false
 	upgrades_screen.visible = false
 	upgrades_screen.connect('continue_pressed', _on_upgrades_continue_pressed)
@@ -55,7 +64,9 @@ func spawnEnemy(area):
 			
 	enemy.position = random_pos
 	enemy.connect('death', onEnemyDeath)
-	add_child(enemy)	
+	add_child(enemy)
+		
+	enemy.init(enemy_cur_armor, enemy_cover_rate)
 	
 func spawnHitParticle(target_post, type):
 	var hit_particle = hit_particle_prefab.instantiate()
@@ -81,8 +92,9 @@ func destroyEnemies():
 		enemy.queue_free() 
 
 func onEnemyDeath():
+	player.setNum(1)
 	kills += 1
-	kills_label.value = kills
+	kills_bar.value = kills
 
 func applyAcquiredSkill(secret):
 	if secret == null: return
@@ -90,10 +102,19 @@ func applyAcquiredSkill(secret):
 	match secret.slug:
 		'increase_health': player.updateHealth(1)
 		'increase_max_point': player.updateMaxPoint(1)
-		'increase_shoot_rate': pass
-		'increase_shoot_amount': pass
-		'cactus': pass
-		'plank': pass
+		'increase_shoot_rate': player.updateShootRate(1)
+		'increase_shoot_amount': player.updateShootAmount(1)
+		
+		# unlock new ability
+		'cactus','plank': 
+			var new_card
+			
+			for card in cards_container.get_children():
+				if secret.slug == card.getSlug():
+					new_card = card
+					break
+			
+			if new_card != null: new_card.visible = true
 
 func _on_upgrades_continue_pressed(secret) -> void:
 	upgrades_screen.visible = false
@@ -101,11 +122,19 @@ func _on_upgrades_continue_pressed(secret) -> void:
 	
 	applyAcquiredSkill(secret)
 	
+	level += 1
 	max_active_enemies = 5
-	required_kills += 1
+
 	kills = 0
-	kills_label.max_value = required_kills
-	kills_label.value = kills
+	required_kills += 5
+	kills_bar.value = kills
+	kills_bar.max_value = required_kills
+	
+	# every 3rd levels, increase enemy armor
+	if level % 3 == 0: enemy_cur_armor = min(enemy_cur_armor + 1, enemy_max_armor)
+		
+	# every 6th levels, increase chance for enemy to have cover
+	if level % 6 == 0: enemy_cover_rate = min(enemy_cover_rate + 0.1, 1)
 		
 func _on_restart_pressed() -> void:
 	get_tree().reload_current_scene()

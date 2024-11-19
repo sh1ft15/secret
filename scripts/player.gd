@@ -32,7 +32,7 @@ func setNum(num):
 	label.modulate = Color.GREEN if cur_num >= max_num else Color.WHITE
 	
 	updateCards()
-
+	
 func getNum(): return cur_num
 
 func updateHealth(num):
@@ -43,6 +43,7 @@ func updateHealth(num):
 	
 func updateMaxPoint(num):
 	max_num = max(min(max_num + num, 30), 10)
+	label.modulate = Color.GREEN if cur_num >= max_num else Color.WHITE
 	
 func updateShootRate(num):
 	shoot_rate = max(min(shoot_rate + num, 5), 1)
@@ -81,7 +82,8 @@ func isInViewPort(post):
 func updateCards():
 	var cards = get_tree().get_nodes_in_group('card')
 	for card in cards: 
-		card.updateAvailable(cur_num >= card.getCost())
+		if card != null:
+			card.updateAvailable(cur_num >= card.getCost())
 
 func _on_body_entered(body: Node2D) -> void:
 	if is_hit || is_death: return

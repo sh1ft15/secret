@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=3 uid="uid://cm5273euoh0r7"]
+
+[ext_resource type="Texture2D" uid="uid://s8urmiddk3ao" path="res://sprites/secret_test.png" id="1_1md27"]
+[ext_resource type="Script" path="res://scripts/placeable_card_button.gd" id="1_ujq8k"]
+[ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="2_tyg4n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yrgrc"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q0ehe"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_b2l6h"]
+font = ExtResource("2_tyg4n")
+font_size = 20
+
+[node name="PlaceableCardButton" type="Button" groups=["card"]]
+custom_minimum_size = Vector2(75, 100)
+theme_override_styles/hover = SubResource("StyleBoxFlat_yrgrc")
+theme_override_styles/normal = SubResource("StyleBoxFlat_q0ehe")
+script = ExtResource("1_ujq8k")
+
+[node name="HBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_1md27")
+expand_mode = 2
+stretch_mode = 6
+
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+color = Color(0, 0, 0, 0.392157)
+
+[node name="Label" type="Label" parent="HBoxContainer/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+text = "0"
+label_settings = SubResource("LabelSettings_b2l6h")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

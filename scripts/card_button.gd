@@ -11,7 +11,5 @@ func update(p_sprite, p_desc, p_color = null):
 	desc.text = p_desc
 	desc.modulate = p_color if p_color != null else Color.WHITE
 
-
-
 func _on_pressed() -> void:
 	emit_signal('card_button_pressed', self)

@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3doha"]
 [ext_resource type="PackedScene" uid="uid://dpdy6hqdxypsq" path="res://scenes/player.tscn" id="2_s43kx"]
-[ext_resource type="PackedScene" uid="uid://73qvg2vbt0y5" path="res://scenes/card.tscn" id="4_q73w5"]
 [ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="5_dkiys"]
 [ext_resource type="PackedScene" uid="uid://cq8nyfcvs6rxv" path="res://scenes/upgrade_screen.tscn" id="5_do4jj"]
 [ext_resource type="PackedScene" uid="uid://8ilowit2o8th" path="res://scenes/spawn_point.tscn" id="5_pmoai"]
-[ext_resource type="Texture2D" uid="uid://cqw7s7pw8wwqv" path="res://sprites/circle_64.png" id="6_cdfaf"]
+[ext_resource type="Texture2D" uid="uid://b8ildpsd8j0sb" path="res://sprites/heart.png" id="6_gxng6"]
 [ext_resource type="PackedScene" uid="uid://c7lpkwr43ape4" path="res://scenes/cursor.tscn" id="6_yw6dw"]
+[ext_resource type="PackedScene" uid="uid://cm5273euoh0r7" path="res://scenes/placeable_card_button.tscn" id="7_muehs"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_0vpnd"]
 vertices = PackedVector2Array(798.406, 508.844, -139.609, 510.656, -143.602, -107.828, 798.406, -107.828)
@@ -63,28 +63,8 @@ size_flags_vertical = 1
 theme_override_styles/fill = SubResource("StyleBoxFlat_5nskg")
 show_percentage = false
 
-[node name="Cards" type="HBoxContainer" parent="CanvasLayer"]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -40.0
-offset_right = 40.0
-grow_vertical = 0
-
-[node name="Card_1" parent="CanvasLayer/Cards" instance=ExtResource("4_q73w5")]
-visible = false
-position = Vector2(50, -15)
-
-[node name="Card_2" parent="CanvasLayer/Cards" instance=ExtResource("4_q73w5")]
-visible = false
-position = Vector2(130, -15)
-card_type = 1
-
-[node name="Card_3" parent="CanvasLayer/Cards" instance=ExtResource("4_q73w5")]
-visible = false
-position = Vector2(210, -15)
-
 [node name="SecretScreen" parent="CanvasLayer" instance=ExtResource("5_do4jj")]
+visible = false
 
 [node name="GameOverScreen" type="CenterContainer" parent="CanvasLayer"]
 visible = false
@@ -125,45 +105,61 @@ text = "RESTART
 [node name="Hearts" type="HBoxContainer" parent="CanvasLayer"]
 offset_left = 10.0
 offset_top = 10.0
-offset_right = 225.0
-offset_bottom = 45.0
-theme_override_constants/separation = 10
+offset_right = 310.0
+offset_bottom = 60.0
+theme_override_constants/separation = 0
 
 [node name="Heart_1" type="TextureRect" parent="CanvasLayer/Hearts"]
-custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
-texture = ExtResource("6_cdfaf")
+texture = ExtResource("6_gxng6")
 expand_mode = 2
 
 [node name="Heart_2" type="TextureRect" parent="CanvasLayer/Hearts"]
-custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
-texture = ExtResource("6_cdfaf")
+texture = ExtResource("6_gxng6")
 expand_mode = 2
 
 [node name="Heart_3" type="TextureRect" parent="CanvasLayer/Hearts"]
-custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
-texture = ExtResource("6_cdfaf")
+texture = ExtResource("6_gxng6")
 expand_mode = 2
 
 [node name="Heart_4" type="TextureRect" parent="CanvasLayer/Hearts"]
-custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
-texture = ExtResource("6_cdfaf")
+texture = ExtResource("6_gxng6")
 expand_mode = 2
 
 [node name="Heart_5" type="TextureRect" parent="CanvasLayer/Hearts"]
-custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
-texture = ExtResource("6_cdfaf")
+texture = ExtResource("6_gxng6")
 expand_mode = 2
 
 [node name="Heart_6" type="TextureRect" parent="CanvasLayer/Hearts"]
-custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
-texture = ExtResource("6_cdfaf")
+texture = ExtResource("6_gxng6")
 expand_mode = 2
+
+[node name="Cards" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -110.0
+offset_right = 90.0
+offset_bottom = -10.0
+grow_vertical = 0
+theme_override_constants/separation = 10
+
+[node name="PlaceableCardButton_1" parent="CanvasLayer/Cards" node_paths=PackedStringArray("player") instance=ExtResource("7_muehs")]
+visible = false
+layout_mode = 2
+player = NodePath("../../../Player")
+
+[node name="PlaceableCardButton_2" parent="CanvasLayer/Cards" node_paths=PackedStringArray("player") instance=ExtResource("7_muehs")]
+visible = false
+layout_mode = 2
+player = NodePath("../../../Player")
+card_type = 1
 
 [node name="SpawnPoints" type="Node" parent="."]
 

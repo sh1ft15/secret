@@ -5,25 +5,25 @@ const secrets = [
 		'slug': 'increase_health', 
 		'desc': 'Health +1', 
 		'repeatable': true,
-		'sprite': preload('res://sprites/secret_test.png')
+		'sprite': preload('res://sprites/heart.png')
 	},
 	{
 		'slug': 'increase_max_point', 
 		'desc': 'Max Points +1', 
 		'repeatable': true,
-		'sprite': preload('res://sprites/secret_test.png')
+		'sprite': preload('res://sprites/heart.png')
 	},
 	{
 		'slug': 'increase_shoot_rate', 
 		'desc': 'Shoot Rate +1', 
 		'repeatable': true,
-		'sprite': preload('res://sprites/secret_test.png')
+		'sprite': preload('res://sprites/heart.png')
 	},
 	{
-		'slug': 'increase_shoot_count', 
+		'slug': 'increase_shoot_amount', 
 		'desc': 'Shoot Amount +1', 
 		'repeatable': true,
-		'sprite': preload('res://sprites/leave.png')
+		'sprite': preload('res://sprites/heart.png')
 	},
 	{
 		'slug': 'plank', 
@@ -41,8 +41,10 @@ const secrets = [
 
 signal continue_pressed(secrets)
 
+@export var placeable_secrets : BoxContainer
 @onready var button_container = $PanelContainer/HBoxContainer/GridContainer
 @onready var default_icon = load("res://sprites/secret_test.png")
+@onready var continue_button = $PanelContainer/HBoxContainer/Continue
 
 var acquired_secrets = []
 var selected_secret
@@ -58,6 +60,7 @@ func reveal(selected_button):
 	if has_reveal: return
 	
 	has_reveal = true
+	continue_button.disabled = false
 	
 	var temp_secrets = secrets.duplicate(true)
 	
@@ -81,10 +84,13 @@ func reveal(selected_button):
 			acquired_secrets.append(secret)
 		else:
 			button.modulate = Color.GRAY
+			
+	
 
 func reset():
 	has_reveal = false
 	selected_secret = null
+	continue_button.disabled = true
 	
 	if button_container == null: return
 	
@@ -92,6 +98,8 @@ func reset():
 		button.update(default_icon, '')
 		button.modulate = Color.WHITE
 		button.disabled = false
+
+func getAcquiredSecrets(): return acquired_secrets
 
 func _on_continue_pressed() -> void:
 	emit_signal('continue_pressed', selected_secret)

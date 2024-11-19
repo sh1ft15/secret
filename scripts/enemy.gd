@@ -17,21 +17,22 @@ signal death
 var is_hit = false
 var is_death = false
 var has_cover = false
-var max_num = 5
 var rand_num
 var max_dist
 var player
 var cursor
 
 func _ready() -> void:
-	rand_num = randi() % max_num + 1 
-	label.text = str(rand_num)	
-	sprite.frame = rand_num - 1
 	player = get_tree().get_first_node_in_group('player')
 	cursor = get_tree().get_first_node_in_group('cursor')
 	max_dist = position.distance_to(player.position)
 	
-	setupCover()
+func init(max_num, cover_rate):
+	rand_num = randi() % max_num + 1
+	label.text = str(rand_num)	
+	sprite.frame = rand_num - 1
+	
+	setupCover(randf() <= cover_rate)
 
 func getNum(): return rand_num
 
@@ -108,11 +109,11 @@ func checkObstacles():
 			
 	return null		
 	
-func setupCover():
-	has_cover = false # randf() <= .5 
-	cover.visible = has_cover
+func setupCover(rate):
+	has_cover = rate
 	
 	if has_cover: 
+		cover.visible = true
 		cover.get_node("Sprite").texture = covers[0 if randf() <= .5  else 1]
 	
 func hasCover(): return has_cover

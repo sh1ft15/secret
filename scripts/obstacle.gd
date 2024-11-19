@@ -38,10 +38,9 @@ func triggerHit():
 
 func _on_body_entered(body: Node2D) -> void:
 	if is_hit: return
+	
 	if body.is_in_group('enemy'): 
 		triggerHit()
-		if stats.reflect_damage: body.triggerHit(false)
-			
 		
-			
-		
+		if stats.skill == 'reflect_damage': 
+			body.triggerHit(false)
