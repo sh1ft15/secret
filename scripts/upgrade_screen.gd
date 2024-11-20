@@ -1,52 +1,14 @@
 extends CenterContainer
 
-const secrets = [
-	{
-		'slug': 'increase_health', 
-		'desc': 'Health +1', 
-		'repeatable': true,
-		'sprite': preload('res://sprites/heart.png')
-	},
-	{
-		'slug': 'increase_max_point', 
-		'desc': 'Max Points +1', 
-		'repeatable': true,
-		'sprite': preload('res://sprites/heart.png')
-	},
-	{
-		'slug': 'increase_shoot_rate', 
-		'desc': 'Shoot Rate +1', 
-		'repeatable': true,
-		'sprite': preload('res://sprites/heart.png')
-	},
-	{
-		'slug': 'increase_shoot_amount', 
-		'desc': 'Shoot Amount +1', 
-		'repeatable': true,
-		'sprite': preload('res://sprites/heart.png')
-	},
-	{
-		'slug': 'plank', 
-		'desc': 'Can place a plank. It does nothing',
-		'repeatable': false,
-		'sprite': preload("res://sprites/plank.png")
-	},
-	{
-		'slug': 'cactus', 
-		'desc': 'Can place a cactus. It hurt the bugs',
-		'repeatable': false,
-		'sprite': preload("res://sprites/cactus.png")
-	}
-]
-
 signal continue_pressed(secrets)
 
 @export var placeable_secrets : BoxContainer
+@onready var upgrades_data = preload("res://scripts/upgrades_data.gd")
 @onready var button_container = $PanelContainer/HBoxContainer/GridContainer
-@onready var default_icon = load("res://sprites/secret_test.png")
 @onready var continue_button = $PanelContainer/HBoxContainer/Continue
 
 var acquired_secrets = []
+var cur_secrets = []
 var selected_secret
 var has_reveal = false
 
@@ -62,20 +24,10 @@ func reveal(selected_button):
 	has_reveal = true
 	continue_button.disabled = false
 	
-	var temp_secrets = secrets.duplicate(true)
-	
-	# remove un-repeatable buffs
-	for secret in acquired_secrets:
-		if not secret.repeatable:
-			var index = temp_secrets.find(secret)
-			
-			if index != -1: temp_secrets.remove_at(index)
-	
-	for button in button_container.get_children():
-		var index = randi() % temp_secrets.size()
-		var secret = temp_secrets[index]
+	for i in button_container.get_child_count():
+		var button = button_container.get_child(i)
+		var secret = cur_secrets[i]
 		
-		temp_secrets.remove_at(index)
 		button.disabled = true
 		
 		if button == selected_button: 
@@ -85,8 +37,6 @@ func reveal(selected_button):
 		else:
 			button.modulate = Color.GRAY
 			
-	
-
 func reset():
 	has_reveal = false
 	selected_secret = null
@@ -94,12 +44,55 @@ func reset():
 	
 	if button_container == null: return
 	
-	for button in button_container.get_children():
-		button.update(default_icon, '')
-		button.modulate = Color.WHITE
-		button.disabled = false
+	cur_secrets = getAvailableSecrets()
+	
+	for i in button_container.get_child_count():
+		button_container.get_child(i).init(cur_secrets[i])
+		
 
 func getAcquiredSecrets(): return acquired_secrets
+
+func getAvailableSecrets():
+	var temp_secrets = upgrades_data.secrets.duplicate(true)
+	var list = []
+	
+	# remove upgrades for support units if not yet unlocked
+	for type in ['plank', 'cactus']:
+		var acquires= acquired_secrets.filter(func(item): 
+			return item.slug == type
+		)
+		
+		if acquires.size() <= 0: 
+			for i in temp_secrets.size() - 1:
+				if temp_secrets[i].slug == 'upgrade_' + type:
+					temp_secrets.remove_at(i)
+				
+	
+	# remove limited repeatable upgrades
+	for secret in upgrades_data.secrets:
+		if typeof(secret.repeatable) == TYPE_INT:
+			var acquires = acquired_secrets.filter(func(item): 
+				return item.slug == secret.slug
+			)
+			
+			if acquires.size() >= secret.repeatable: 
+				temp_secrets.remove(secret)
+	
+	# remove un-repeatable upgrades
+	for secret in acquired_secrets:
+		if typeof(secret.repeatable) == TYPE_BOOL and not secret.repeatable:
+			var index = temp_secrets.find(secret)
+			
+			if index != -1: temp_secrets.remove_at(index)
+	
+	for button in button_container.get_children():
+		var index = randi() % temp_secrets.size()
+		var secret = temp_secrets[index]
+		
+		list.append(secret)
+		temp_secrets.remove_at(index)
+		
+	return list
 
 func _on_continue_pressed() -> void:
 	emit_signal('continue_pressed', selected_secret)

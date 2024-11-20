@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://dpdy6hqdxypsq"]
+[gd_scene load_steps=11 format=3 uid="uid://dpdy6hqdxypsq"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_vsn0w"]
 [ext_resource type="Texture2D" uid="uid://0kwfh7wtuu34" path="res://sprites/base.png" id="2_kbwdy"]
-[ext_resource type="LabelSettings" uid="uid://bxd4vxtolk6r0" path="res://sprites/char_num_top.tres" id="3_6npt1"]
+[ext_resource type="Texture2D" uid="uid://d1ogitxxn23gw" path="res://sprites/coin.png" id="3_jpbpp"]
+[ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="4_l6lbb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5vtr2"]
 radius = 50.0
@@ -44,6 +45,18 @@ _data = {
 "idle": SubResource("Animation_y3fjo")
 }
 
+[sub_resource type="LabelSettings" id="LabelSettings_mu77u"]
+font = ExtResource("4_l6lbb")
+font_size = 40
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_oxfy3"]
+font = ExtResource("4_l6lbb")
+font_size = 50
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
 [node name="Player" type="Area2D" groups=["player"]]
 script = ExtResource("1_vsn0w")
 
@@ -58,16 +71,6 @@ radius = 20.0
 scale = Vector2(0.35, 0.35)
 texture = ExtResource("2_kbwdy")
 
-[node name="Label" type="Label" parent="."]
-z_index = 1
-offset_left = -27.0
-offset_top = 56.0
-offset_right = 28.0
-offset_bottom = 114.0
-text = "0"
-label_settings = ExtResource("3_6npt1")
-horizontal_alignment = 1
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_bmf36")
@@ -76,6 +79,47 @@ libraries = {
 [node name="BulletTimer" type="Timer" parent="."]
 wait_time = 3.0
 autostart = true
+
+[node name="Coins" type="HBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = 40.0
+offset_right = 64.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="Coins"]
+custom_minimum_size = Vector2(60, 100)
+layout_mode = 2
+texture = ExtResource("3_jpbpp")
+expand_mode = 4
+stretch_mode = 6
+
+[node name="X" type="Label" parent="Coins"]
+z_index = 1
+custom_minimum_size = Vector2(30, 50)
+layout_mode = 2
+size_flags_vertical = 1
+text = "X"
+label_settings = SubResource("LabelSettings_mu77u")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="Coins"]
+z_index = 1
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "0
+"
+label_settings = SubResource("LabelSettings_oxfy3")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="BulletTimer" to="." method="_on_bullet_timer_timeout"]

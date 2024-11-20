@@ -1,7 +1,7 @@
 extends Area2D
 
 @onready var bullet_prefab = load("res://scenes/bullet.tscn") 
-@onready var label = $Label
+@onready var label = $Coins/Label
 @onready var sprite = $Icon
 @onready var animator = $AnimationPlayer
 @onready var bullet_timer = $BulletTimer
@@ -14,7 +14,6 @@ var is_death = false
 var max_health = 6
 var health = 2
 
-var max_num = 10
 var cur_num = 0
 
 var shoot_rate = 1
@@ -25,11 +24,8 @@ func _ready() -> void:
 	updateHealth(0)
 
 func setNum(num):
-	if cur_num >= max_num: return
-	
-	cur_num = max(min(cur_num + num, max_num), 0)
+	cur_num = cur_num + num
 	label.text = str(cur_num) 
-	label.modulate = Color.GREEN if cur_num >= max_num else Color.WHITE
 	
 	updateCards()
 	
@@ -40,10 +36,6 @@ func updateHealth(num):
 	
 	for i in heart_container.get_child_count():
 		heart_container.get_child(i).visible = (i + 1) <= health
-	
-func updateMaxPoint(num):
-	max_num = max(min(max_num + num, 30), 10)
-	label.modulate = Color.GREEN if cur_num >= max_num else Color.WHITE
 	
 func updateShootRate(num):
 	shoot_rate = max(min(shoot_rate + num, 5), 1)

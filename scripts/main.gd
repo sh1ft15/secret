@@ -101,7 +101,6 @@ func applyAcquiredSkill(secret):
 	
 	match secret.slug:
 		'increase_health': player.updateHealth(1)
-		'increase_max_point': player.updateMaxPoint(1)
 		'increase_shoot_rate': player.updateShootRate(1)
 		'increase_shoot_amount': player.updateShootAmount(1)
 		

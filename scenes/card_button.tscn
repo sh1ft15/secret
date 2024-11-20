@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bo16ww4glu5vx"]
+[gd_scene load_steps=11 format=3 uid="uid://bo16ww4glu5vx"]
 
 [ext_resource type="Script" path="res://scripts/card_button.gd" id="1_p681k"]
 [ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="2_5yr25"]
 [ext_resource type="Texture2D" uid="uid://s8urmiddk3ao" path="res://sprites/secret_test.png" id="2_has6l"]
+[ext_resource type="Texture2D" uid="uid://d1ogitxxn23gw" path="res://sprites/coin.png" id="4_0rjdd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0qycs"]
 bg_color = Color(1, 1, 1, 1)
@@ -20,8 +21,18 @@ bg_color = Color(0.585062, 0.585062, 0.585062, 1)
 font = ExtResource("2_5yr25")
 font_size = 18
 
+[sub_resource type="LabelSettings" id="LabelSettings_bb6yc"]
+font = ExtResource("2_5yr25")
+font_size = 50
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
 [node name="CardButton" type="Button"]
 custom_minimum_size = Vector2(230, 280)
+offset_left = -1.0
+offset_top = -3.0
+offset_right = 229.0
+offset_bottom = 277.0
 theme_override_styles/disabled = SubResource("StyleBoxFlat_0qycs")
 theme_override_styles/hover = SubResource("StyleBoxFlat_8vwgg")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_0nxit")
@@ -29,27 +40,29 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_6jlka")
 icon_alignment = 1
 script = ExtResource("1_p681k")
 
-[node name="HBoxContainer" type="VBoxContainer" parent="."]
+[node name="HBox" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 1
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBox"]
 layout_mode = 2
 size_flags_vertical = 3
 texture = ExtResource("2_has6l")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="ColorRect" type="ColorRect" parent="HBoxContainer"]
+[node name="Desc" type="ColorRect" parent="HBox"]
+visible = false
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 color = Color(0, 0, 0, 0.784314)
 
-[node name="Label" type="Label" parent="HBoxContainer/ColorRect"]
+[node name="Label" type="Label" parent="HBox/Desc"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -66,5 +79,42 @@ label_settings = SubResource("LabelSettings_d38uf")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="Cost" type="ColorRect" parent="HBox"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+color = Color(0.144063, 0.144063, 0.144063, 0.784314)
+
+[node name="HBox" type="HBoxContainer" parent="HBox/Cost"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -42.0
+offset_top = -40.0
+offset_right = 42.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="HBox/Cost/HBox"]
+z_index = 1
+custom_minimum_size = Vector2(30, 80)
+layout_mode = 2
+size_flags_vertical = 1
+text = "0
+"
+label_settings = SubResource("LabelSettings_bb6yc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="HBox/Cost/HBox"]
+custom_minimum_size = Vector2(50, 80)
+layout_mode = 2
+texture = ExtResource("4_0rjdd")
+expand_mode = 4
+stretch_mode = 6
 
 [connection signal="pressed" from="." to="." method="_on_pressed"]
