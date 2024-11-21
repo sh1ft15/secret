@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bm3yot7h8v3c5"]
+[gd_scene load_steps=17 format=3 uid="uid://bm3yot7h8v3c5"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3doha"]
 [ext_resource type="PackedScene" uid="uid://dpdy6hqdxypsq" path="res://scenes/player.tscn" id="2_s43kx"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://8ilowit2o8th" path="res://scenes/spawn_point.tscn" id="5_pmoai"]
 [ext_resource type="Texture2D" uid="uid://b8ildpsd8j0sb" path="res://sprites/heart.png" id="6_gxng6"]
 [ext_resource type="PackedScene" uid="uid://c7lpkwr43ape4" path="res://scenes/cursor.tscn" id="6_yw6dw"]
+[ext_resource type="PackedScene" uid="uid://d10ipi3fnyhu8" path="res://scenes/combo_counter.tscn" id="7_g65kh"]
 [ext_resource type="PackedScene" uid="uid://cm5273euoh0r7" path="res://scenes/placeable_card_button.tscn" id="7_muehs"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_0vpnd"]
@@ -37,6 +38,9 @@ bg_color = Color(0, 0, 0, 1)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0yrx6"]
 size = Vector2(14.4813, 10.5319)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0cxqv"]
+size = Vector2(15.4711, 12.644)
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_3doha")
 
@@ -63,8 +67,9 @@ size_flags_vertical = 1
 theme_override_styles/fill = SubResource("StyleBoxFlat_5nskg")
 show_percentage = false
 
-[node name="SecretScreen" parent="CanvasLayer" instance=ExtResource("5_do4jj")]
+[node name="SecretScreen" parent="CanvasLayer" node_paths=PackedStringArray("player") instance=ExtResource("5_do4jj")]
 visible = false
+player = NodePath("../../Player")
 
 [node name="GameOverScreen" type="CenterContainer" parent="CanvasLayer"]
 visible = false
@@ -161,10 +166,15 @@ layout_mode = 2
 player = NodePath("../../../Player")
 card_type = 1
 
+[node name="ComboCounter" parent="CanvasLayer" instance=ExtResource("7_g65kh")]
+
 [node name="SpawnPoints" type="Node" parent="."]
 
 [node name="SpawnPoint" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
 position = Vector2(-95, -82)
+
+[node name="SpawnPoint3" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(-120, 110)
 
 [node name="SpawnPoint2" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
 position = Vector2(-135, 331)
@@ -172,11 +182,29 @@ position = Vector2(-135, 331)
 [node name="SpawnPoint6" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
 position = Vector2(1274, 320)
 
+[node name="SpawnPoint9" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(1266, 108)
+
 [node name="SpawnPoint7" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
 position = Vector2(1225, -85)
 
+[node name="SpawnPoint10" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(1033, -100)
+
+[node name="SpawnPoint11" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(845, -110)
+
 [node name="SpawnPoint8" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
-position = Vector2(550, -92)
+position = Vector2(653, -117)
+
+[node name="SpawnPoint12" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(466, -122)
+
+[node name="SpawnPoint13" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(283, -125)
+
+[node name="SpawnPoint14" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
+position = Vector2(86, -128)
 
 [node name="Field" type="Area2D" parent="."]
 position = Vector2(577, 323)
@@ -195,6 +223,17 @@ z_index = -1
 color = Color(0, 1, 0, 0.117647)
 polygon = PackedVector2Array(-545.611, -323.217, 539.521, -321.836, 539.521, 285.923, -544.393, 285.923)
 
+[node name="AttackField" type="Area2D" parent="."]
+position = Vector2(577, 323)
+scale = Vector2(0.821098, 0.723971)
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackField"]
+position = Vector2(-4.2627, -15.8846)
+rotation = -3.14159
+scale = Vector2(70.1395, -47.7391)
+shape = SubResource("RectangleShape2D_0cxqv")
+
 [node name="Cursor" parent="." instance=ExtResource("6_yw6dw")]
 
 [node name="DifficultyTimer" type="Timer" parent="."]
@@ -203,4 +242,6 @@ autostart = true
 
 [connection signal="pressed" from="CanvasLayer/GameOverScreen/PanelContainer/HBoxContainer/Restart" to="." method="_on_restart_pressed"]
 [connection signal="input_event" from="Field" to="Cursor" method="_on_field_input_event"]
+[connection signal="body_entered" from="AttackField" to="." method="_on_attack_field_body_entered"]
+[connection signal="input_event" from="AttackField" to="Cursor" method="_on_field_input_event"]
 [connection signal="timeout" from="DifficultyTimer" to="." method="_on_difficulty_timer_timeout"]

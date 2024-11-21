@@ -1,0 +1,109 @@
+[gd_scene load_steps=7 format=3 uid="uid://d10ipi3fnyhu8"]
+
+[ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="1_4y3gn"]
+
+[sub_resource type="Animation" id="Animation_e58eg"]
+resource_name = "idle"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.3, 1.3), Vector2(1.2, 1.2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0.392157)]
+}
+
+[sub_resource type="Animation" id="Animation_ngw3e"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nbyi5"]
+_data = {
+"RESET": SubResource("Animation_ngw3e"),
+"idle": SubResource("Animation_e58eg")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_ddsib"]
+font = ExtResource("1_4y3gn")
+font_size = 50
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ivkyp"]
+font = ExtResource("1_4y3gn")
+font_size = 100
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+
+[node name="ComboCounter" type="HBoxContainer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -198.0
+offset_top = 55.0
+offset_right = -105.0
+offset_bottom = 170.0
+grow_horizontal = 0
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="Anim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_nbyi5")
+}
+
+[node name="X" type="Label" parent="."]
+layout_mode = 2
+text = "x"
+label_settings = SubResource("LabelSettings_ddsib")
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Count" type="Label" parent="."]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_ivkyp")
+horizontal_alignment = 1
+vertical_alignment = 1

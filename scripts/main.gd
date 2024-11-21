@@ -8,6 +8,7 @@ extends Node2D
 @onready var upgrades_screen = $CanvasLayer/SecretScreen
 @onready var cards_container = $CanvasLayer/Cards
 @onready var kills_bar = $CanvasLayer/ProgressBar
+@onready var combo_counter = $CanvasLayer/ComboCounter
 @onready var player = $Player
 
 var game_over = false
@@ -18,7 +19,7 @@ var max_enemies = 300
 var max_active_enemies = 5
 
 var kills = 0
-var required_kills = 5
+var required_kills = 50
 
 var enemy_max_armor = 5
 var enemy_cur_armor = 2
@@ -26,6 +27,7 @@ var enemy_cover_rate = 0
 
 func _ready() -> void:
 	kills_bar.max_value = required_kills
+	combo_counter.visible = false
 	game_over_screen.visible = false
 	upgrades_screen.visible = false
 	upgrades_screen.connect('continue_pressed', _on_upgrades_continue_pressed)
@@ -64,6 +66,7 @@ func spawnEnemy(area):
 			
 	enemy.position = random_pos
 	enemy.connect('death', onEnemyDeath)
+	enemy.connect('chain_matched', onEnemyChainMatched)
 	add_child(enemy)
 		
 	enemy.init(enemy_cur_armor, enemy_cover_rate)
@@ -92,40 +95,50 @@ func destroyEnemies():
 		enemy.queue_free() 
 
 func onEnemyDeath():
-	player.setNum(1)
 	kills += 1
 	kills_bar.value = kills
-
-func applyAcquiredSkill(secret):
-	if secret == null: return
 	
-	match secret.slug:
-		'increase_health': player.updateHealth(1)
-		'increase_shoot_rate': player.updateShootRate(1)
-		'increase_shoot_amount': player.updateShootAmount(1)
-		
-		# unlock new ability
-		'cactus','plank': 
-			var new_card
-			
-			for card in cards_container.get_children():
-				if secret.slug == card.getSlug():
-					new_card = card
-					break
-			
-			if new_card != null: new_card.visible = true
+func onEnemyChainMatched(size):
+	combo_counter.visible = true
+	combo_counter.get_node('Timer').start()
+	combo_counter.get_node('Anim').play('idle')
+	combo_counter.get_node('Count').text = str(size)
+	
+	await combo_counter.get_node('Timer').timeout
+	
+	combo_counter.visible = false
 
-func _on_upgrades_continue_pressed(secret) -> void:
+func applyAcquiredSkill(secrets):
+	if secrets.size() == 0: return
+	
+	for secret in secrets:
+		match secret.slug:
+			'increase_health': player.updateHealth(1)
+			'increase_shoot_rate': player.updateShootRate(1)
+			'increase_shoot_amount': player.updateShootAmount(1)
+			
+			# unlock new support units
+			'cactus','plank': 
+				var new_card
+				
+				for card in cards_container.get_children():
+					if secret.slug == card.getSlug():
+						new_card = card
+						break
+				
+				if new_card != null: new_card.visible = true
+
+func _on_upgrades_continue_pressed(secrets) -> void:
 	upgrades_screen.visible = false
 	game_over = false
 	
-	applyAcquiredSkill(secret)
+	applyAcquiredSkill(secrets)
 	
 	level += 1
 	max_active_enemies = 5
 
 	kills = 0
-	required_kills += 5
+	required_kills += 25
 	kills_bar.value = kills
 	kills_bar.max_value = required_kills
 	
@@ -143,3 +156,7 @@ func _on_difficulty_timer_timeout() -> void:
 	if max_active_enemies == 20: return
 	
 	max_active_enemies = min(max_active_enemies + 5, 20)
+
+func _on_attack_field_body_entered(body: Node2D) -> void:
+	if body.is_in_group('enemy'):
+		body.setVunerable(true)

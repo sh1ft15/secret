@@ -14,17 +14,18 @@ var is_death = false
 var max_health = 6
 var health = 2
 
-var cur_num = 0
+var cur_num = 30
 
 var shoot_rate = 1
 var shoot_amount = 1
 
 func _ready() -> void:
 	animator.play('idle')
+	label.text = str(cur_num)
 	updateHealth(0)
 
 func setNum(num):
-	cur_num = cur_num + num
+	cur_num = max(cur_num + num, 0)
 	label.text = str(cur_num) 
 	
 	updateCards()
@@ -42,7 +43,7 @@ func updateShootRate(num):
 	bullet_timer.wait_time = max(3 - ((shoot_rate / 5) * 3), .5)
 	
 func updateShootAmount(num):
-	shoot_amount = roundi(max(min(shoot_amount + num, 4), 0))
+	shoot_amount = roundi(max(min(shoot_amount + num, 6), 0))
 
 func isDeath(): return is_death
 
@@ -85,6 +86,8 @@ func _on_body_entered(body: Node2D) -> void:
 		is_death = health <= 0
 
 func _on_bullet_timer_timeout() -> void:
+	if cur_num <= 0: return
+	
 	var enemies = get_tree().get_nodes_in_group('enemy')
 	var target_enemies = []
 	
@@ -101,6 +104,7 @@ func _on_bullet_timer_timeout() -> void:
 				max_dist = cur_dist
 				target_enemy = enemy
 		
-		if target_enemy != null: 
+		if target_enemy != null and cur_num > 0: 
 			target_enemies.append(target_enemy)
 			shootBullet(target_enemy.position)
+			setNum(-1)

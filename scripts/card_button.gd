@@ -7,11 +7,12 @@ extends Button
 @onready var cost_label = $HBox/Cost/HBox/Label
 @onready var default_icon = load("res://sprites/secret_test.png")
 
+var cur_secret = null
 var cur_cost = 0
 
 signal card_button_pressed(button)
 
-func init(upgrade):
+func init(secret):
 	modulate = Color.WHITE
 	disabled = false
 	
@@ -19,14 +20,22 @@ func init(upgrade):
 	desc_rect.visible = false
 	cost_rect.visible = true
 	
-	cur_cost = randi_range(upgrade.cost_min, upgrade.cost_max)
+	cur_secret = secret
+	cur_cost = randi_range(secret.cost_min, secret.cost_max)
 	cost_label.text = str(cur_cost)
 
-func update(p_sprite, p_desc):
-	sprite.texture = p_sprite	
+func open():
+	sprite.texture = cur_secret.sprite	
+	desc_label.text = cur_secret.desc
 	cost_rect.visible = false
 	desc_rect.visible = true
-	desc_label.text = p_desc
+
+func setAffordable(status):
+	cost_label.modulate = Color.WHITE if status else Color.RED
+
+func getCost(): return cur_cost
+
+func getSecret(): return cur_secret
 
 func _on_pressed() -> void:
 	emit_signal('card_button_pressed', self)

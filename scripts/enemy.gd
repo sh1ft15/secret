@@ -13,10 +13,13 @@ extends CharacterBody2D
 @export var speed = 100
 
 signal death
+signal chain_matched(size)
 
+var is_vunerable = false
 var is_hit = false
 var is_death = false
 var has_cover = false
+var max_chain = 10
 var rand_num
 var max_dist
 var player
@@ -27,6 +30,8 @@ func _ready() -> void:
 	cursor = get_tree().get_first_node_in_group('cursor')
 	max_dist = position.distance_to(player.position)
 	
+	setVunerable(is_vunerable)
+	
 func init(max_num, cover_rate):
 	rand_num = randi() % max_num + 1
 	label.text = str(rand_num)	
@@ -36,23 +41,29 @@ func init(max_num, cover_rate):
 
 func getNum(): return rand_num
 
-func triggerHit(player):
+func triggerHit(click = false):
 	if is_hit or is_death: return
 	
 	is_hit = true
 	
 	if has_cover: checkCover() 
-	else:
-		rand_num -= 1
-		sprite.frame = max(rand_num - 1, 0)
-		label.text = str(rand_num) if rand_num > 0 else ''
+	elif click and checkMatches(): return
+	else: 
+		var damage = 1
+		
+		# no damage for player click if there is no coins
+		if click and player.getNum() <= 0: damage = 0
+		
+		if damage > 0:
+			rand_num -= damage
+			sprite.frame = max(rand_num - damage, 0)
+			label.text = str(rand_num) if rand_num > 0 else ''
 	
-		if player and checkMatches(): return
+			if rand_num <= 0: 
+				get_tree().current_scene.spawnHitParticle(position, 'blood')
+				sprite.modulate = Color(1, .1, .1)
+			else: get_tree().current_scene.spawnHitParticle(position, 'hit')
 	
-		if rand_num <= 0: 
-			get_tree().current_scene.spawnHitParticle(position, 'blood')
-			sprite.modulate = Color(1, .1, .1)
-		else: get_tree().current_scene.spawnHitParticle(position, 'hit')
 	
 	animator.play('hurt')
 
@@ -78,25 +89,41 @@ func triggerMatch():
 	emit_signal('death')
 	queue_free()
 
-func checkMatches():	
-	var enemies = get_tree().get_nodes_in_group('enemy')
-	var matches = []
+func checkMatches(chains = [self]):	
+	if chains.size() > max_chain: return false
 	
-	for enemy in enemies: 
-		if position.distance_to(enemy.position) <= 200:
-			if enemy.getNum() == rand_num: matches.append(enemy)
-
-	if matches.size() > 1:
-		var match_count = 0
+	var enemies = get_tree().get_nodes_in_group('enemy')
+	var min_dist = 130
+	var next_enemy = null
+	
+	for enemy in enemies:
+		if enemy == self or enemy in chains or !enemy.isVunerable(): continue
 		
-		for enemy in matches: 
-			enemy.triggerMatch()
-			match_count += 1
-			
-		player.setNum(match_count)
-			
+		var dist = position.distance_to(enemy.position)
+		
+		if dist <= min_dist && enemy.getNum() == rand_num: 
+			next_enemy = enemy
+			min_dist = dist
+	
+	# there is next enemy in the chains, continue to search
+	if next_enemy: 
+		chains.append(next_enemy)
+		next_enemy.checkMatches(chains)
+		player.setNum(1)
+		triggerMatch()
+	
 		return true
-	else: return false
+	
+	# if enemy is the final node in the chains	
+	elif chains.size() > 1:
+		
+		player.setNum(1)
+		triggerMatch()
+		emit_signal('chain_matched', chains.size())
+		
+	else: 
+		
+		return false
 
 func checkObstacles():
 	var obstacles = get_tree().get_nodes_in_group('obstacle')
@@ -115,6 +142,12 @@ func setupCover(rate):
 	if has_cover: 
 		cover.visible = true
 		cover.get_node("Sprite").texture = covers[0 if randf() <= .5  else 1]
+
+func setVunerable(status): 
+	is_vunerable = status
+	sprite.modulate = Color.WHITE if status else Color(1, 1, 1, .5)
+	
+func isVunerable(): return is_vunerable	
 	
 func hasCover(): return has_cover
 
@@ -152,6 +185,7 @@ func _physics_process(delta: float) -> void:
 
 func _on_navigation_agent_2d_velocity_computed(safe_velocity: Vector2) -> void:
 	if is_hit or is_death: return
+	
 	velocity = safe_velocity
 	sprite.flip_h = velocity.x < 0
 
@@ -160,11 +194,17 @@ func _on_navigation_agent_2d_velocity_computed(safe_velocity: Vector2) -> void:
 	move_and_slide()
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if is_hit or is_death or cursor.isPlacingItem(): return
+	if !is_vunerable or is_hit or is_death or cursor.isPlacingItem(): return
 	if event.is_action_pressed("left_mouse_click"):
+		
 		triggerHit(true)
+		
+		if player.getNum() > 0: player.setNum(-1)
 
 func _on_cover_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if is_hit or is_death or cursor.isPlacingItem(): return
+	if !is_vunerable or is_hit or is_death or cursor.isPlacingItem(): return
 	if event.is_action_pressed("left_mouse_click"):
+		
 		triggerHit(true)
+		
+		if player.getNum() > 0: player.setNum(-1)

@@ -15,7 +15,7 @@ const secrets = [
 		'cost_min': 3,
 		'cost_max': 10,
 		'repeatable': true,
-		'sprite': preload('res://sprites/heart.png')
+		'sprite': preload('res://sprites/coin.png')
 	},
 	{
 		'slug': 'increase_shoot_rate', 

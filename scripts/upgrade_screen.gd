@@ -2,15 +2,14 @@ extends CenterContainer
 
 signal continue_pressed(secrets)
 
-@export var placeable_secrets : BoxContainer
+@export var player : Area2D
 @onready var upgrades_data = preload("res://scripts/upgrades_data.gd")
 @onready var button_container = $PanelContainer/HBoxContainer/GridContainer
 @onready var continue_button = $PanelContainer/HBoxContainer/Continue
 
 var acquired_secrets = []
 var cur_secrets = []
-var selected_secret
-var has_reveal = false
+var selected_secrets = []
 
 func _ready() -> void:
 	for button in button_container.get_children():
@@ -18,37 +17,33 @@ func _ready() -> void:
 		
 	reset()
 
-func reveal(selected_button):
-	if has_reveal: return
-	
-	has_reveal = true
-	continue_button.disabled = false
-	
-	for i in button_container.get_child_count():
-		var button = button_container.get_child(i)
-		var secret = cur_secrets[i]
+func reveal(card):
+	if player.getNum() >= card.getCost(): 
+		player.setNum(card.getCost() * -1)
+		card.open()
+		updateUI()
 		
-		button.disabled = true
-		
-		if button == selected_button: 
-			button.update(secret.sprite, secret.desc)
-			selected_secret = secret
-			acquired_secrets.append(secret)
-		else:
-			button.modulate = Color.GRAY
+		selected_secrets.append(card.getSecret())
+		acquired_secrets.append(card.getSecret())
 			
 func reset():
-	has_reveal = false
-	selected_secret = null
-	continue_button.disabled = true
+	selected_secrets = []
 	
 	if button_container == null: return
 	
 	cur_secrets = getAvailableSecrets()
 	
 	for i in button_container.get_child_count():
-		button_container.get_child(i).init(cur_secrets[i])
+		var card = button_container.get_child(i)
 		
+		card.init(cur_secrets[i])
+		card.setAffordable(player.getNum() >= card.getCost())	
+
+func updateUI():
+	for i in button_container.get_child_count():
+		var card = button_container.get_child(i)
+		
+		card.setAffordable(player.getNum() >= card.getCost())	
 
 func getAcquiredSecrets(): return acquired_secrets
 
@@ -95,7 +90,7 @@ func getAvailableSecrets():
 	return list
 
 func _on_continue_pressed() -> void:
-	emit_signal('continue_pressed', selected_secret)
+	emit_signal('continue_pressed', selected_secrets)
 
 func _on_visibility_changed() -> void:
 	if visible: reset()
