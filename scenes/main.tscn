@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bm3yot7h8v3c5"]
+[gd_scene load_steps=18 format=3 uid="uid://bm3yot7h8v3c5"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3doha"]
 [ext_resource type="PackedScene" uid="uid://dpdy6hqdxypsq" path="res://scenes/player.tscn" id="2_s43kx"]
@@ -6,14 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://cq8nyfcvs6rxv" path="res://scenes/upgrade_screen.tscn" id="5_do4jj"]
 [ext_resource type="PackedScene" uid="uid://8ilowit2o8th" path="res://scenes/spawn_point.tscn" id="5_pmoai"]
 [ext_resource type="Texture2D" uid="uid://b8ildpsd8j0sb" path="res://sprites/heart.png" id="6_gxng6"]
-[ext_resource type="PackedScene" uid="uid://c7lpkwr43ape4" path="res://scenes/cursor.tscn" id="6_yw6dw"]
 [ext_resource type="PackedScene" uid="uid://d10ipi3fnyhu8" path="res://scenes/combo_counter.tscn" id="7_g65kh"]
-[ext_resource type="PackedScene" uid="uid://cm5273euoh0r7" path="res://scenes/placeable_card_button.tscn" id="7_muehs"]
-
-[sub_resource type="NavigationPolygon" id="NavigationPolygon_0vpnd"]
-vertices = PackedVector2Array(798.406, 508.844, -139.609, 510.656, -143.602, -107.828, 798.406, -107.828)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(-153.674, -117.832, 808.408, -117.832, 808.408, 518.832, -149.553, 520.682)])
+[ext_resource type="Texture2D" uid="uid://d1ogitxxn23gw" path="res://sprites/coin.png" id="7_rnlwx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5nskg"]
 bg_color = Color(0.933333, 0, 0, 1)
@@ -35,25 +29,34 @@ outline_color = Color(0, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d1s5v"]
 bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0yrx6"]
-size = Vector2(14.4813, 10.5319)
+[sub_resource type="LabelSettings" id="LabelSettings_gayc1"]
+font = ExtResource("5_dkiys")
+font_size = 30
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_k65g2"]
+font = ExtResource("5_dkiys")
+font_size = 30
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ja1ix"]
+font = ExtResource("5_dkiys")
+font_size = 45
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_0vpnd"]
+vertices = PackedVector2Array(798.406, 508.844, -139.609, 510.656, -143.602, -107.828, 798.406, -107.828)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-153.674, -117.832, 808.408, -117.832, 808.408, 518.832, -149.553, 520.682)])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0cxqv"]
 size = Vector2(15.4711, 12.644)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_3doha")
-
-[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
-visible = false
-position = Vector2(14, 1)
-scale = Vector2(1.6984, 1.62095)
-navigation_polygon = SubResource("NavigationPolygon_0vpnd")
-
-[node name="Player" parent="." node_paths=PackedStringArray("heart_container", "cursor") instance=ExtResource("2_s43kx")]
-position = Vector2(577, 416)
-heart_container = NodePath("../CanvasLayer/Hearts")
-cursor = NodePath("../Cursor")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -108,10 +111,8 @@ text = "RESTART
 "
 
 [node name="Hearts" type="HBoxContainer" parent="CanvasLayer"]
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 310.0
-offset_bottom = 60.0
+offset_right = 300.0
+offset_bottom = 50.0
 theme_override_constants/separation = 0
 
 [node name="Heart_1" type="TextureRect" parent="CanvasLayer/Hearts"]
@@ -144,29 +145,70 @@ layout_mode = 2
 texture = ExtResource("6_gxng6")
 expand_mode = 2
 
-[node name="Cards" type="HBoxContainer" parent="CanvasLayer"]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = -110.0
-offset_right = 90.0
-offset_bottom = -10.0
-grow_vertical = 0
-theme_override_constants/separation = 10
-
-[node name="PlaceableCardButton_1" parent="CanvasLayer/Cards" node_paths=PackedStringArray("player") instance=ExtResource("7_muehs")]
-visible = false
-layout_mode = 2
-player = NodePath("../../../Player")
-
-[node name="PlaceableCardButton_2" parent="CanvasLayer/Cards" node_paths=PackedStringArray("player") instance=ExtResource("7_muehs")]
-visible = false
-layout_mode = 2
-player = NodePath("../../../Player")
-card_type = 1
-
 [node name="ComboCounter" parent="CanvasLayer" instance=ExtResource("7_g65kh")]
+offset_left = -325.0
+offset_top = 109.0
+offset_right = -147.0
+offset_bottom = 224.0
+
+[node name="Level" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -55.5
+offset_top = -40.0
+offset_right = 55.5
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Wave" type="Label" parent="CanvasLayer/Level"]
+layout_mode = 2
+text = "WAVE : "
+label_settings = SubResource("LabelSettings_gayc1")
+
+[node name="Num" type="Label" parent="CanvasLayer/Level"]
+layout_mode = 2
+text = "1"
+label_settings = SubResource("LabelSettings_k65g2")
+
+[node name="Coins" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -109.0
+offset_right = -16.0
+offset_bottom = 80.0
+grow_horizontal = 0
+
+[node name="Num" type="Label" parent="CanvasLayer/Coins"]
+z_index = 1
+custom_minimum_size = Vector2(30, 80)
+layout_mode = 2
+size_flags_vertical = 1
+text = "30
+"
+label_settings = SubResource("LabelSettings_ja1ix")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Coins"]
+custom_minimum_size = Vector2(50, 40)
+layout_mode = 2
+texture = ExtResource("7_rnlwx")
+expand_mode = 4
+stretch_mode = 6
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+visible = false
+position = Vector2(14, 1)
+scale = Vector2(1.6984, 1.62095)
+navigation_polygon = SubResource("NavigationPolygon_0vpnd")
+
+[node name="Player" parent="." node_paths=PackedStringArray("heart_container") instance=ExtResource("2_s43kx")]
+position = Vector2(577, 416)
+heart_container = NodePath("../CanvasLayer/Hearts")
 
 [node name="SpawnPoints" type="Node" parent="."]
 
@@ -174,54 +216,37 @@ card_type = 1
 position = Vector2(-95, -82)
 
 [node name="SpawnPoint3" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
-position = Vector2(-120, 110)
+position = Vector2(-144, 96)
 
 [node name="SpawnPoint2" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
-position = Vector2(-135, 331)
+position = Vector2(-163, 273)
 
 [node name="SpawnPoint6" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
-position = Vector2(1274, 320)
+position = Vector2(1300, 270)
 
 [node name="SpawnPoint9" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
-position = Vector2(1266, 108)
+position = Vector2(1284, 90)
 
 [node name="SpawnPoint7" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
 position = Vector2(1225, -85)
 
 [node name="SpawnPoint10" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
-position = Vector2(1033, -100)
+position = Vector2(1035, -124)
 
 [node name="SpawnPoint11" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
-position = Vector2(845, -110)
+position = Vector2(841, -143)
 
 [node name="SpawnPoint8" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
-position = Vector2(653, -117)
+position = Vector2(653, -159)
 
 [node name="SpawnPoint12" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
-position = Vector2(466, -122)
+position = Vector2(465, -160)
 
 [node name="SpawnPoint13" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
-position = Vector2(283, -125)
+position = Vector2(277, -143)
 
 [node name="SpawnPoint14" parent="SpawnPoints" instance=ExtResource("5_pmoai")]
 position = Vector2(86, -128)
-
-[node name="Field" type="Area2D" parent="."]
-position = Vector2(577, 323)
-scale = Vector2(0.821098, 0.723971)
-collision_layer = 4
-collision_mask = 4
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Field"]
-position = Vector2(1.21777, -38.6756)
-rotation = -3.14159
-scale = Vector2(70.1395, -47.7391)
-shape = SubResource("RectangleShape2D_0yrx6")
-
-[node name="Polygon2D" type="Polygon2D" parent="Field"]
-z_index = -1
-color = Color(0, 1, 0, 0.117647)
-polygon = PackedVector2Array(-545.611, -323.217, 539.521, -321.836, 539.521, 285.923, -544.393, 285.923)
 
 [node name="AttackField" type="Area2D" parent="."]
 position = Vector2(577, 323)
@@ -234,14 +259,14 @@ rotation = -3.14159
 scale = Vector2(70.1395, -47.7391)
 shape = SubResource("RectangleShape2D_0cxqv")
 
-[node name="Cursor" parent="." instance=ExtResource("6_yw6dw")]
+[node name="Polygon2D" type="Polygon2D" parent="AttackField"]
+color = Color(0.0588235, 0.615686, 0.282353, 0.392157)
+polygon = PackedVector2Array(-546.829, -317.692, 537.086, -319.074, 538.304, 287.304, -546.829, 284.542)
 
 [node name="DifficultyTimer" type="Timer" parent="."]
 wait_time = 10.0
 autostart = true
 
 [connection signal="pressed" from="CanvasLayer/GameOverScreen/PanelContainer/HBoxContainer/Restart" to="." method="_on_restart_pressed"]
-[connection signal="input_event" from="Field" to="Cursor" method="_on_field_input_event"]
 [connection signal="body_entered" from="AttackField" to="." method="_on_attack_field_body_entered"]
-[connection signal="input_event" from="AttackField" to="Cursor" method="_on_field_input_event"]
 [connection signal="timeout" from="DifficultyTimer" to="." method="_on_difficulty_timer_timeout"]

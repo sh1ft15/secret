@@ -6,9 +6,10 @@ extends Node2D
 @onready var nav_region = $NavigationRegion2D
 @onready var game_over_screen = $CanvasLayer/GameOverScreen
 @onready var upgrades_screen = $CanvasLayer/SecretScreen
-@onready var cards_container = $CanvasLayer/Cards
 @onready var kills_bar = $CanvasLayer/ProgressBar
 @onready var combo_counter = $CanvasLayer/ComboCounter
+@onready var wave_counter = $CanvasLayer/Level/Num
+@onready var player_coins_counter = $CanvasLayer/Coins/Num
 @onready var player = $Player
 
 var game_over = false
@@ -30,6 +31,8 @@ func _ready() -> void:
 	combo_counter.visible = false
 	game_over_screen.visible = false
 	upgrades_screen.visible = false
+	
+	player.connect('coin_updated', playerCoinUpdated)
 	upgrades_screen.connect('continue_pressed', _on_upgrades_continue_pressed)
 
 func _process(delta: float) -> void:
@@ -118,15 +121,10 @@ func applyAcquiredSkill(secrets):
 			'increase_shoot_amount': player.updateShootAmount(1)
 			
 			# unlock new support units
-			'cactus','plank': 
-				var new_card
-				
-				for card in cards_container.get_children():
-					if secret.slug == card.getSlug():
-						new_card = card
-						break
-				
-				if new_card != null: new_card.visible = true
+			'cactus','plank': pass
+
+func playerCoinUpdated(num):
+	player_coins_counter.text = str(num)
 
 func _on_upgrades_continue_pressed(secrets) -> void:
 	upgrades_screen.visible = false
@@ -135,6 +133,7 @@ func _on_upgrades_continue_pressed(secrets) -> void:
 	applyAcquiredSkill(secrets)
 	
 	level += 1
+	wave_counter.text = str(level)
 	max_active_enemies = 5
 
 	kills = 0

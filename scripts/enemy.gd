@@ -194,7 +194,7 @@ func _on_navigation_agent_2d_velocity_computed(safe_velocity: Vector2) -> void:
 	move_and_slide()
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if !is_vunerable or is_hit or is_death or cursor.isPlacingItem(): return
+	if !is_vunerable or is_hit or is_death: return
 	if event.is_action_pressed("left_mouse_click"):
 		
 		triggerHit(true)
@@ -202,7 +202,7 @@ func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 		if player.getNum() > 0: player.setNum(-1)
 
 func _on_cover_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if !is_vunerable or is_hit or is_death or cursor.isPlacingItem(): return
+	if !is_vunerable or is_hit or is_death: return
 	if event.is_action_pressed("left_mouse_click"):
 		
 		triggerHit(true)

@@ -6,6 +6,7 @@ signal continue_pressed(secrets)
 @onready var upgrades_data = preload("res://scripts/upgrades_data.gd")
 @onready var button_container = $PanelContainer/HBoxContainer/GridContainer
 @onready var continue_button = $PanelContainer/HBoxContainer/Continue
+@onready var player_coin = $PanelContainer/HBoxContainer/HBox/Coin
 
 var acquired_secrets = []
 var cur_secrets = []
@@ -27,10 +28,10 @@ func reveal(card):
 		acquired_secrets.append(card.getSecret())
 			
 func reset():
-	selected_secrets = []
-	
 	if button_container == null: return
 	
+	selected_secrets = []
+	player_coin.text = str(player.getNum())
 	cur_secrets = getAvailableSecrets()
 	
 	for i in button_container.get_child_count():
@@ -40,6 +41,8 @@ func reset():
 		card.setAffordable(player.getNum() >= card.getCost())	
 
 func updateUI():
+	player_coin.text = str(player.getNum())
+	
 	for i in button_container.get_child_count():
 		var card = button_container.get_child(i)
 		

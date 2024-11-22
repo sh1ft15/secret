@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://cq8nyfcvs6rxv"]
+[gd_scene load_steps=9 format=3 uid="uid://cq8nyfcvs6rxv"]
 
 [ext_resource type="Script" path="res://scripts/upgrade_screen.gd" id="1_af613"]
 [ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="1_beswm"]
+[ext_resource type="Texture2D" uid="uid://d1ogitxxn23gw" path="res://sprites/coin.png" id="3_xmg7f"]
 [ext_resource type="PackedScene" uid="uid://bo16ww4glu5vx" path="res://scenes/card_button.tscn" id="4_nccvl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6tj23"]
@@ -15,6 +16,12 @@ shadow_size = 3
 [sub_resource type="LabelSettings" id="LabelSettings_kp0ta"]
 font = ExtResource("1_beswm")
 font_size = 40
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_sknt8"]
+font = ExtResource("1_beswm")
+font_size = 50
 outline_size = 10
 outline_color = Color(0, 0, 0, 1)
 
@@ -44,12 +51,33 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_6tj23")
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="PanelContainer/HBoxContainer"]
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/HBoxContainer"]
 layout_mode = 2
+
+[node name="Title" type="Label" parent="PanelContainer/HBoxContainer/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "pick a secret
 "
 label_settings = SubResource("LabelSettings_kp0ta")
+
+[node name="Coin" type="Label" parent="PanelContainer/HBoxContainer/HBox"]
+z_index = 1
+custom_minimum_size = Vector2(30, 80)
+layout_mode = 2
+size_flags_vertical = 1
+text = "0
+"
+label_settings = SubResource("LabelSettings_sknt8")
 horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CoinSprite" type="TextureRect" parent="PanelContainer/HBoxContainer/HBox"]
+custom_minimum_size = Vector2(50, 80)
+layout_mode = 2
+texture = ExtResource("3_xmg7f")
+expand_mode = 4
+stretch_mode = 6
 
 [node name="GridContainer" type="GridContainer" parent="PanelContainer/HBoxContainer"]
 layout_mode = 2

@@ -1,12 +1,13 @@
 extends Area2D
 
 @onready var bullet_prefab = load("res://scenes/bullet.tscn") 
-@onready var label = $Coins/Label
 @onready var sprite = $Icon
 @onready var animator = $AnimationPlayer
 @onready var bullet_timer = $BulletTimer
 @export var heart_container: BoxContainer
 @export var cursor : Area2D
+
+signal coin_updated(num)
 
 var is_hit = false
 var is_death = false
@@ -21,14 +22,11 @@ var shoot_amount = 1
 
 func _ready() -> void:
 	animator.play('idle')
-	label.text = str(cur_num)
 	updateHealth(0)
 
-func setNum(num):
+func setNum(num): 
 	cur_num = max(cur_num + num, 0)
-	label.text = str(cur_num) 
-	
-	updateCards()
+	emit_signal('coin_updated', cur_num)
 	
 func getNum(): return cur_num
 
@@ -71,12 +69,6 @@ func shootBullet(target_position):
 
 func isInViewPort(post):
 	return get_viewport_rect().has_point(post)
-
-func updateCards():
-	var cards = get_tree().get_nodes_in_group('card')
-	for card in cards: 
-		if card != null:
-			card.updateAvailable(cur_num >= card.getCost())
 
 func _on_body_entered(body: Node2D) -> void:
 	if is_hit || is_death: return

@@ -1,34 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://d10ipi3fnyhu8"]
+[gd_scene load_steps=8 format=3 uid="uid://d10ipi3fnyhu8"]
 
 [ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="1_4y3gn"]
-
-[sub_resource type="Animation" id="Animation_e58eg"]
-resource_name = "idle"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1.3, 1.3), Vector2(1.2, 1.2)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0.392157)]
-}
+[ext_resource type="Texture2D" uid="uid://d1ogitxxn23gw" path="res://sprites/coin.png" id="2_vg1bx"]
 
 [sub_resource type="Animation" id="Animation_ngw3e"]
 length = 0.001
@@ -57,13 +30,41 @@ tracks/1/keys = {
 "values": [Color(1, 1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_e58eg"]
+resource_name = "idle"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.3, 1.3), Vector2(1.2, 1.2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0.784314)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nbyi5"]
 _data = {
 "RESET": SubResource("Animation_ngw3e"),
 "idle": SubResource("Animation_e58eg")
 }
 
-[sub_resource type="LabelSettings" id="LabelSettings_ddsib"]
+[sub_resource type="LabelSettings" id="LabelSettings_fuwvs"]
 font = ExtResource("1_4y3gn")
 font_size = 50
 outline_size = 20
@@ -71,7 +72,7 @@ outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_ivkyp"]
 font = ExtResource("1_4y3gn")
-font_size = 100
+font_size = 80
 outline_size = 20
 outline_color = Color(0, 0, 0, 1)
 
@@ -93,12 +94,13 @@ libraries = {
 "": SubResource("AnimationLibrary_nbyi5")
 }
 
-[node name="X" type="Label" parent="."]
+[node name="x" type="Label" parent="."]
+custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
-text = "x"
-label_settings = SubResource("LabelSettings_ddsib")
+text = "X"
+label_settings = SubResource("LabelSettings_fuwvs")
 horizontal_alignment = 1
-vertical_alignment = 2
+vertical_alignment = 1
 
 [node name="Count" type="Label" parent="."]
 custom_minimum_size = Vector2(60, 0)
@@ -107,3 +109,10 @@ text = "0"
 label_settings = SubResource("LabelSettings_ivkyp")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(70, 80)
+layout_mode = 2
+texture = ExtResource("2_vg1bx")
+expand_mode = 4
+stretch_mode = 6

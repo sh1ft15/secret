@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cmhoua7mbs60g"]
 
-[ext_resource type="Texture2D" uid="uid://c6watmkv11m51" path="res://sprites/icon.svg" id="1_bfnra"]
 [ext_resource type="Script" path="res://scripts/bullet.gd" id="1_xnard"]
+[ext_resource type="Texture2D" uid="uid://d1ogitxxn23gw" path="res://sprites/coin.png" id="2_wnytj"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_i6nj0"]
 
@@ -12,8 +12,8 @@ script = ExtResource("1_xnard")
 shape = SubResource("CircleShape2D_i6nj0")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("1_bfnra")
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_wnytj")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 2.0
