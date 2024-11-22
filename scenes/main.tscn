@@ -146,10 +146,10 @@ texture = ExtResource("6_gxng6")
 expand_mode = 2
 
 [node name="ComboCounter" parent="CanvasLayer" instance=ExtResource("7_g65kh")]
-offset_left = -325.0
-offset_top = 109.0
-offset_right = -147.0
-offset_bottom = 224.0
+offset_left = -213.0
+offset_top = 102.0
+offset_right = -109.0
+offset_bottom = 194.0
 
 [node name="Level" type="HBoxContainer" parent="CanvasLayer"]
 anchors_preset = 7

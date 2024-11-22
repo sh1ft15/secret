@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://d10ipi3fnyhu8"]
+[gd_scene load_steps=7 format=3 uid="uid://d10ipi3fnyhu8"]
 
 [ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="1_4y3gn"]
-[ext_resource type="Texture2D" uid="uid://d1ogitxxn23gw" path="res://sprites/coin.png" id="2_vg1bx"]
 
 [sub_resource type="Animation" id="Animation_ngw3e"]
 length = 0.001
@@ -109,10 +108,3 @@ text = "0"
 label_settings = SubResource("LabelSettings_ivkyp")
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="."]
-custom_minimum_size = Vector2(70, 80)
-layout_mode = 2
-texture = ExtResource("2_vg1bx")
-expand_mode = 4
-stretch_mode = 6
