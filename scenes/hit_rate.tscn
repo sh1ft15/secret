@@ -1,0 +1,140 @@
+[gd_scene load_steps=8 format=3 uid="uid://b75eokio5kjw5"]
+
+[ext_resource type="Script" path="res://scripts/hit_rate.gd" id="1_3oin7"]
+[ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="1_xogn0"]
+[ext_resource type="Texture2D" uid="uid://d1ogitxxn23gw" path="res://sprites/coin.png" id="2_y82lp"]
+
+[sub_resource type="Animation" id="Animation_4dskx"]
+resource_name = "idle"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HBox:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-42, -40), Vector2(-42, -80)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HBox:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.15, 1.15), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("HBox:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0.392157)]
+}
+
+[sub_resource type="Animation" id="Animation_k2uqh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HBox:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-42, -40)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HBox:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("HBox:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hkufb"]
+_data = {
+"RESET": SubResource("Animation_k2uqh"),
+"idle": SubResource("Animation_4dskx")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_b4uuj"]
+font = ExtResource("1_xogn0")
+font_size = 50
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[node name="HitRate" type="Node2D"]
+scale = Vector2(0.7, 0.7)
+script = ExtResource("1_3oin7")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[node name="Anim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_hkufb")
+}
+
+[node name="HBox" type="HBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -42.0
+offset_top = -40.0
+offset_right = 42.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="HBox"]
+z_index = 1
+custom_minimum_size = Vector2(30, 80)
+layout_mode = 2
+size_flags_vertical = 1
+text = "0
+"
+label_settings = SubResource("LabelSettings_b4uuj")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="HBox"]
+custom_minimum_size = Vector2(50, 80)
+layout_mode = 2
+texture = ExtResource("2_y82lp")
+expand_mode = 4
+stretch_mode = 6
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

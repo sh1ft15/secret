@@ -3,6 +3,7 @@ extends Node2D
 @onready var hit_particle_prefab = load("res://scenes/hit_particle.tscn")
 @onready var obstacle_prefab = load("res://scenes/obstacle.tscn")
 @onready var enemy_prefab = load("res://scenes/enemy.tscn")
+@onready var hit_rate_prefab = load("res://scenes/hit_rate.tscn")
 @onready var nav_region = $NavigationRegion2D
 @onready var game_over_screen = $CanvasLayer/GameOverScreen
 @onready var upgrades_screen = $CanvasLayer/SecretScreen
@@ -110,6 +111,15 @@ func onEnemyChainMatched(size):
 	await combo_counter.get_node('Timer').timeout
 	
 	combo_counter.visible = false
+
+func spawnHitRate(post, num):
+	var hit_rate = hit_rate_prefab.instantiate()
+	
+	hit_rate.global_position = post
+	
+	add_child(hit_rate)
+	
+	hit_rate.init(num)
 
 func applyAcquiredSkill(secrets):
 	if secrets.size() == 0: return

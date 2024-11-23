@@ -57,8 +57,7 @@ layout_mode = 2
 [node name="Title" type="Label" parent="PanelContainer/HBoxContainer/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "pick a secret
-"
+text = "secret shop"
 label_settings = SubResource("LabelSettings_kp0ta")
 
 [node name="Coin" type="Label" parent="PanelContainer/HBoxContainer/HBox"]

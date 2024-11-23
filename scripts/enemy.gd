@@ -58,6 +58,8 @@ func triggerHit(click = false):
 			rand_num -= damage
 			sprite.frame = max(rand_num - damage, 0)
 			label.text = str(rand_num) if rand_num > 0 else ''
+			
+			if click: get_tree().current_scene.spawnHitRate(position, -1)
 	
 			if rand_num <= 0: 
 				get_tree().current_scene.spawnHitParticle(position, 'blood')
@@ -83,6 +85,7 @@ func triggerMatch():
 	sprite.modulate = Color.GREEN
 	animator.play('hurt')
 	get_tree().current_scene.spawnHitParticle(position, 'hit')
+	get_tree().current_scene.spawnHitRate(position, 1)
 	
 	await get_tree().create_timer(.1).timeout
 	
