@@ -99,4 +99,6 @@ func _on_bullet_timer_timeout() -> void:
 		if target_enemy != null and cur_num > 0: 
 			target_enemies.append(target_enemy)
 			shootBullet(target_enemy.position)
+			
 			setNum(-1)
+			get_tree().current_scene.spawnHitRate(position, -1)

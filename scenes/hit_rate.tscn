@@ -96,6 +96,7 @@ outline_size = 10
 outline_color = Color(0, 0, 0, 1)
 
 [node name="HitRate" type="Node2D"]
+z_index = 2
 scale = Vector2(0.7, 0.7)
 script = ExtResource("1_3oin7")
 
@@ -113,9 +114,8 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -42.0
-offset_top = -40.0
+offset_top = -80.0
 offset_right = 42.0
-offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
 

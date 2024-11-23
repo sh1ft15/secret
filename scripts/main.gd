@@ -43,7 +43,7 @@ func _process(delta: float) -> void:
 	
 	if player.isDeath(): showGameOverScreen()
 	
-	if kills >= required_kills:showUpgradesScreen()
+	if kills >= required_kills: showUpgradesScreen()
 		
 	var active_enemies = get_tree().get_node_count_in_group('enemy')
 		
