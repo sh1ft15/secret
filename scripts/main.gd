@@ -3,6 +3,7 @@ extends Node2D
 @onready var hit_particle_prefab = load("res://scenes/hit_particle.tscn")
 @onready var obstacle_prefab = load("res://scenes/obstacle.tscn")
 @onready var enemy_prefab = load("res://scenes/enemy.tscn")
+@onready var boss_prefab = load("res://scenes/boss.tscn")
 @onready var hit_rate_prefab = load("res://scenes/hit_rate.tscn")
 @onready var nav_region = $NavigationRegion2D
 @onready var game_over_screen = $CanvasLayer/GameOverScreen
@@ -17,8 +18,8 @@ var game_over = false
 
 var level = 1
 
-var max_enemies = 300
 var max_active_enemies = 5
+var max_active_bosses = 1
 
 var kills = 0
 var required_kills = 50
@@ -45,6 +46,7 @@ func _process(delta: float) -> void:
 	
 	if kills >= required_kills: showUpgradesScreen()
 		
+	# spawn normal enemy
 	var active_enemies = get_tree().get_node_count_in_group('enemy')
 		
 	if (active_enemies < max_active_enemies):
@@ -72,8 +74,17 @@ func spawnEnemy(area):
 	enemy.connect('death', onEnemyDeath)
 	enemy.connect('chain_matched', onEnemyChainMatched)
 	add_child(enemy)
-		
 	enemy.init(enemy_cur_armor, enemy_cover_rate)
+			
+func spawnBoss(area):
+	var rect = area.get_child(0).shape.get_rect()
+	var x = randi_range(rect.position.x, rect.position.x + rect.size.x)
+	var y = randi_range(rect.position.y, rect.position.y + rect.size.y)
+	var random_pos = area.global_position + Vector2(x, y)
+	var boss = boss_prefab.instantiate()
+	
+	boss.position = random_pos
+	add_child(boss)
 	
 func spawnHitParticle(target_post, type):
 	var hit_particle = hit_particle_prefab.instantiate()
@@ -152,10 +163,14 @@ func _on_upgrades_continue_pressed(secrets) -> void:
 	kills_bar.max_value = required_kills
 	
 	# every 3rd levels, increase enemy armor
-	if level % 3 == 0: enemy_cur_armor = min(enemy_cur_armor + 1, enemy_max_armor)
+	if level % 3 == 0: 
+		enemy_cur_armor = min(enemy_cur_armor + 1, enemy_max_armor)
+		max_active_bosses = 1 if max_active_bosses <= 0 else 0
 		
 	# every 6th levels, increase chance for enemy to have cover
-	if level % 6 == 0: enemy_cover_rate = min(enemy_cover_rate + 0.1, 1)
+	if level % 6 == 0: 
+		enemy_cover_rate = min(enemy_cover_rate + 0.1, 1)
+		max_active_bosses = min(max_active_bosses + 1, 3)
 		
 func _on_restart_pressed() -> void:
 	get_tree().reload_current_scene()
@@ -165,6 +180,15 @@ func _on_difficulty_timer_timeout() -> void:
 	if max_active_enemies == 20: return
 	
 	max_active_enemies = min(max_active_enemies + 5, 20)
+	
+	# spawn occasional bosses		
+	var active_bosses = get_tree().get_node_count_in_group('boss')
+	
+	if (randf() <= .5 && active_bosses < max_active_bosses):
+		var spawn_points = get_tree().get_nodes_in_group('spawn_point')
+		
+		for i in max_active_bosses:
+			spawnBoss(spawn_points[randi_range(0, spawn_points.size() - 1)])
 
 func _on_attack_field_body_entered(body: Node2D) -> void:
 	if body.is_in_group('enemy') or body.is_in_group('boss'):

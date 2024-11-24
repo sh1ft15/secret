@@ -1,6 +1,5 @@
 extends CharacterBody2D
 
-@onready var armor_pieces = $ArmorPieces
 @onready var agent = $NavigationAgent2D
 @onready var sprite = $Base
 @onready var animator = $Anim
@@ -18,13 +17,12 @@ var player
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group('player')
 	max_dist = position.distance_to(player.position)
-	rand_num = armor_pieces.get_child_count() + 1
+	rand_num = 6
 	setVunerable(is_vunerable)
 
 func getNum(): return rand_num
 
 func triggerHit(click = false):
-	print('test')
 	if is_hit or is_death: return
 	
 	is_hit = true
@@ -36,22 +34,15 @@ func triggerHit(click = false):
 	
 	if damage > 0:
 		rand_num -= damage
+		sprite.frame = max(rand_num - damage, 0)
 		
 		if click: get_tree().current_scene.spawnHitRate(position, -1)
 		
-		var intact_armor_pieces = armor_pieces.get_children().filter(func(item): 
-			return item.visible
-		)
-		
-		if intact_armor_pieces.size() > 0:
-			var index = randi_range(0, intact_armor_pieces.size() - 1)
-			
-			intact_armor_pieces[index].visible = false
-			get_tree().current_scene.spawnHitParticle(position, 'hit')
-		else:
+		if rand_num <= 0: 
 			get_tree().current_scene.spawnHitParticle(position, 'blood')
 			sprite.modulate = Color(1, .1, .1)
-			
+		else: get_tree().current_scene.spawnHitParticle(position, 'hit')
+		
 	animator.play('hurt')
 
 	await get_tree().create_timer(.4).timeout
@@ -66,9 +57,6 @@ func triggerHit(click = false):
 func setVunerable(status): 
 	is_vunerable = status
 	sprite.modulate = Color.WHITE if status else Color(1, 1, 1, .5)
-	
-	for piece in armor_pieces.get_children(): 
-		piece.modulate = Color.WHITE if status else Color(1, 1, 1, .5)
 	
 func isVunerable(): return is_vunerable	
 
@@ -91,8 +79,6 @@ func _on_navigation_agent_2d_velocity_computed(safe_velocity: Vector2) -> void:
 	
 	velocity = safe_velocity
 	sprite.flip_h = velocity.x < 0
-	
-	for piece in armor_pieces.get_children(): piece.flip_h = velocity.x < 0
 
 	animator.play('move' if velocity.length() > 0 else 'idle')
 	
