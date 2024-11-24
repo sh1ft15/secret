@@ -167,5 +167,5 @@ func _on_difficulty_timer_timeout() -> void:
 	max_active_enemies = min(max_active_enemies + 5, 20)
 
 func _on_attack_field_body_entered(body: Node2D) -> void:
-	if body.is_in_group('enemy'):
+	if body.is_in_group('enemy') or body.is_in_group('boss'):
 		body.setVunerable(true)

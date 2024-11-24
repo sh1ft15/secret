@@ -1,0 +1,86 @@
+[gd_scene load_steps=5 format=3 uid="uid://cnfy3ou4k0wcd"]
+
+[ext_resource type="Script" path="res://scripts/boss.gd" id="1_hsna3"]
+[ext_resource type="Texture2D" uid="uid://ciwcmo6fxwcdr" path="res://sprites/boss.png" id="1_wavlc"]
+[ext_resource type="Texture2D" uid="uid://c2yoerer2x22u" path="res://sprites/boss_armor_pieces.png" id="2_cuisv"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kvf84"]
+radius = 60.0
+
+[node name="Boss" type="CharacterBody2D" groups=["boss"]]
+input_pickable = true
+script = ExtResource("1_hsna3")
+
+[node name="Anim" type="AnimationPlayer" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_kvf84")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+avoidance_enabled = true
+radius = 60.0
+max_speed = 50.0
+
+[node name="Base" type="Sprite2D" parent="."]
+position = Vector2(10, -15)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("1_wavlc")
+
+[node name="ArmorPieces" type="Node2D" parent="."]
+position = Vector2(10, -15)
+
+[node name="Piece_1" type="Sprite2D" parent="ArmorPieces"]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_cuisv")
+hframes = 9
+
+[node name="Piece_2" type="Sprite2D" parent="ArmorPieces"]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_cuisv")
+hframes = 9
+frame = 1
+
+[node name="Piece_3" type="Sprite2D" parent="ArmorPieces"]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_cuisv")
+hframes = 9
+frame = 2
+
+[node name="Piece_4" type="Sprite2D" parent="ArmorPieces"]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_cuisv")
+hframes = 9
+frame = 3
+
+[node name="Piece_5" type="Sprite2D" parent="ArmorPieces"]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_cuisv")
+hframes = 9
+frame = 4
+
+[node name="Piece_6" type="Sprite2D" parent="ArmorPieces"]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_cuisv")
+hframes = 9
+frame = 5
+
+[node name="Piece_7" type="Sprite2D" parent="ArmorPieces"]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_cuisv")
+hframes = 9
+frame = 6
+
+[node name="Piece_8" type="Sprite2D" parent="ArmorPieces"]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_cuisv")
+hframes = 9
+frame = 7
+
+[node name="Piece_9" type="Sprite2D" parent="ArmorPieces"]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_cuisv")
+hframes = 9
+frame = 8
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]
