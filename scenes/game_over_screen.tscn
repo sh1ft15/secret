@@ -1,0 +1,151 @@
+[gd_scene load_steps=8 format=3 uid="uid://cc6gcl8dv6725"]
+
+[ext_resource type="Script" path="res://scripts/game_over_screen.gd" id="1_fywxd"]
+[ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="2_nbasg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6tj23"]
+bg_color = Color(0.972549, 0.972549, 0.92549, 1)
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+shadow_size = 3
+
+[sub_resource type="LabelSettings" id="LabelSettings_kp0ta"]
+font = ExtResource("2_nbasg")
+font_size = 50
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_8q0km"]
+font = ExtResource("2_nbasg")
+font_size = 20
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_13owe"]
+font = ExtResource("2_nbasg")
+font_size = 25
+outline_size = 6
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d1s5v"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="GameOverScreen" type="CenterContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -143.5
+offset_top = -34.5
+offset_right = 143.5
+offset_bottom = 34.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fywxd")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6tj23")
+
+[node name="Column" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="PanelContainer/Column"]
+layout_mode = 2
+text = "GAME OVER
+"
+label_settings = SubResource("LabelSettings_kp0ta")
+horizontal_alignment = 1
+
+[node name="Scores" type="VBoxContainer" parent="PanelContainer/Column"]
+layout_mode = 2
+
+[node name="BugKilled" type="HBoxContainer" parent="PanelContainer/Column/Scores"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/Column/Scores/BugKilled"]
+layout_mode = 2
+text = "Bug Killed"
+label_settings = SubResource("LabelSettings_8q0km")
+
+[node name="Num" type="Label" parent="PanelContainer/Column/Scores/BugKilled"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+label_settings = SubResource("LabelSettings_13owe")
+horizontal_alignment = 2
+
+[node name="BugMatched" type="HBoxContainer" parent="PanelContainer/Column/Scores"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/Column/Scores/BugMatched"]
+layout_mode = 2
+text = "Bug Matched"
+label_settings = SubResource("LabelSettings_8q0km")
+
+[node name="Num" type="Label" parent="PanelContainer/Column/Scores/BugMatched"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+label_settings = SubResource("LabelSettings_13owe")
+horizontal_alignment = 2
+
+[node name="MaxChain" type="HBoxContainer" parent="PanelContainer/Column/Scores"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/Column/Scores/MaxChain"]
+layout_mode = 2
+text = "Max Chain"
+label_settings = SubResource("LabelSettings_8q0km")
+
+[node name="Num" type="Label" parent="PanelContainer/Column/Scores/MaxChain"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+label_settings = SubResource("LabelSettings_13owe")
+horizontal_alignment = 2
+
+[node name="GoldGained" type="HBoxContainer" parent="PanelContainer/Column/Scores"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/Column/Scores/GoldGained"]
+layout_mode = 2
+text = "Gold Gained"
+label_settings = SubResource("LabelSettings_8q0km")
+
+[node name="Num" type="Label" parent="PanelContainer/Column/Scores/GoldGained"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+label_settings = SubResource("LabelSettings_13owe")
+horizontal_alignment = 2
+
+[node name="GoldSpent" type="HBoxContainer" parent="PanelContainer/Column/Scores"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/Column/Scores/GoldSpent"]
+layout_mode = 2
+text = "Gold Spent"
+label_settings = SubResource("LabelSettings_8q0km")
+
+[node name="Num" type="Label" parent="PanelContainer/Column/Scores/GoldSpent"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+label_settings = SubResource("LabelSettings_13owe")
+horizontal_alignment = 2
+
+[node name="Restart" type="Button" parent="PanelContainer/Column"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_nbasg")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_d1s5v")
+text = "RESTART
+"
+
+[connection signal="pressed" from="PanelContainer/Column/Restart" to="." method="_on_restart_pressed"]

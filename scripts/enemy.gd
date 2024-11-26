@@ -19,6 +19,7 @@ var click_denied_sound = preload("res://audios/click_denied.wav")
 @export var speed = 100
 
 signal death
+signal matched
 signal chain_matched(size)
 
 var is_vunerable = false
@@ -62,7 +63,6 @@ func triggerHit(click = false):
 			playAudio(click_denied_sound)
 			damage = 0
 			
-		
 		if damage > 0:
 			rand_num -= damage
 			sprite.frame = max(rand_num - damage, 0)
@@ -102,7 +102,7 @@ func triggerMatch():
 	
 	await get_tree().create_timer(.1).timeout
 	
-	emit_signal('death')
+	emit_signal('matched')
 	queue_free()
 
 func playAudio(stream, volume = 0):

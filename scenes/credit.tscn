@@ -1,0 +1,92 @@
+[gd_scene load_steps=6 format=3 uid="uid://hkpkkhxdmc82"]
+
+[ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="1_p4rr5"]
+[ext_resource type="Script" path="res://scripts/credit.gd" id="1_qifj8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8wqqm"]
+bg_color = Color(0.454524, 0.454524, 0.454524, 1)
+border_color = Color(0.903598, 0.903598, 0.903598, 1)
+shadow_size = 5
+shadow_offset = Vector2(5, 5)
+
+[sub_resource type="LabelSettings" id="LabelSettings_c25d4"]
+font = ExtResource("1_p4rr5")
+font_size = 50
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_iljkj"]
+font = ExtResource("1_p4rr5")
+font_size = 20
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Credit" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qifj8")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -125.0
+offset_right = 250.0
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8wqqm")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -74.0
+offset_top = -42.5
+offset_right = 74.0
+offset_bottom = 42.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 30
+
+[node name="Title" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "credit"
+label_settings = SubResource("LabelSettings_c25d4")
+horizontal_alignment = 1
+
+[node name="List" type="VBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Credit_1" type="Label" parent="Panel/VBoxContainer/List"]
+layout_mode = 2
+text = "GAME BY - SH1FT15"
+label_settings = SubResource("LabelSettings_iljkj")
+horizontal_alignment = 1
+
+[node name="Credit_2" type="Label" parent="Panel/VBoxContainer/List"]
+layout_mode = 2
+text = "Background Music - Yay by Sakura Girl"
+label_settings = SubResource("LabelSettings_iljkj")
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_p4rr5")
+theme_override_font_sizes/font_size = 30
+text = "Back to Game"
+
+[connection signal="pressed" from="Panel/VBoxContainer/Button" to="." method="_on_button_pressed"]

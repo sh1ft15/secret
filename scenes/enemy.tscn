@@ -163,7 +163,7 @@ scale = Vector2(0.32, 0.32)
 texture = ExtResource("3_3vtxv")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-pitch_scale = 3.0
+pitch_scale = 2.0
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]

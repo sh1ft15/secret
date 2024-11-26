@@ -1,6 +1,7 @@
 extends Area2D
 
 var bug_death_sound = preload("res://audios/bug_death.wav")
+var bullet_shoot_sound = preload("res://audios/bullet_shoot.wav")
 
 @onready var bullet_prefab = load("res://scenes/bullet.tscn") 
 @onready var sprite = $Icon
@@ -34,7 +35,7 @@ func _ready() -> void:
 
 func setNum(num): 
 	cur_num = max(cur_num + num, 0)
-	emit_signal('coin_updated', cur_num)
+	emit_signal('coin_updated', cur_num, num)
 	
 func getNum(): return cur_num
 
@@ -70,10 +71,10 @@ func shootBullet(target_position):
 	var bullet = bullet_prefab.instantiate()
 	var direction = (target_position - global_position).normalized()
 	
+	playAudio(bullet_shoot_sound)
 	get_tree().current_scene.add_child(bullet)
 	
 	bullet.position = global_position
-	
 	bullet.velocity = direction * bullet.speed
 	bullet.rotation = direction.angle()
 

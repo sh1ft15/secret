@@ -1,33 +1,18 @@
-[gd_scene load_steps=18 format=3 uid="uid://bm3yot7h8v3c5"]
+[gd_scene load_steps=17 format=3 uid="uid://bm3yot7h8v3c5"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3doha"]
 [ext_resource type="PackedScene" uid="uid://dpdy6hqdxypsq" path="res://scenes/player.tscn" id="2_s43kx"]
+[ext_resource type="PackedScene" uid="uid://cc6gcl8dv6725" path="res://scenes/game_over_screen.tscn" id="3_n78lo"]
 [ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="5_dkiys"]
 [ext_resource type="PackedScene" uid="uid://cq8nyfcvs6rxv" path="res://scenes/upgrade_screen.tscn" id="5_do4jj"]
 [ext_resource type="PackedScene" uid="uid://8ilowit2o8th" path="res://scenes/spawn_point.tscn" id="5_pmoai"]
 [ext_resource type="Texture2D" uid="uid://b8ildpsd8j0sb" path="res://sprites/heart.png" id="6_gxng6"]
 [ext_resource type="PackedScene" uid="uid://d10ipi3fnyhu8" path="res://scenes/combo_counter.tscn" id="7_g65kh"]
 [ext_resource type="Texture2D" uid="uid://d1ogitxxn23gw" path="res://sprites/coin.png" id="7_rnlwx"]
+[ext_resource type="AudioStream" uid="uid://b4csc5xg28lfa" path="res://audios/game_bg_sound.wav" id="10_8difk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5nskg"]
 bg_color = Color(0.933333, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6tj23"]
-bg_color = Color(0.972549, 0.972549, 0.92549, 1)
-expand_margin_left = 20.0
-expand_margin_top = 20.0
-expand_margin_right = 20.0
-expand_margin_bottom = 20.0
-shadow_size = 3
-
-[sub_resource type="LabelSettings" id="LabelSettings_kp0ta"]
-font = ExtResource("5_dkiys")
-font_size = 50
-outline_size = 10
-outline_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d1s5v"]
-bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_gayc1"]
 font = ExtResource("5_dkiys")
@@ -74,41 +59,7 @@ show_percentage = false
 visible = false
 player = NodePath("../../Player")
 
-[node name="GameOverScreen" type="CenterContainer" parent="CanvasLayer"]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -143.5
-offset_top = -34.5
-offset_right = 143.5
-offset_bottom = 34.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/GameOverScreen"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_6tj23")
-
-[node name="HBoxContainer" type="VBoxContainer" parent="CanvasLayer/GameOverScreen/PanelContainer"]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="Label" type="Label" parent="CanvasLayer/GameOverScreen/PanelContainer/HBoxContainer"]
-layout_mode = 2
-text = "GAME OVER
-"
-label_settings = SubResource("LabelSettings_kp0ta")
-
-[node name="Restart" type="Button" parent="CanvasLayer/GameOverScreen/PanelContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("5_dkiys")
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_d1s5v")
-text = "RESTART
-"
+[node name="GameOverScreen" parent="CanvasLayer" instance=ExtResource("3_n78lo")]
 
 [node name="Hearts" type="HBoxContainer" parent="CanvasLayer"]
 offset_right = 300.0
@@ -267,6 +218,10 @@ polygon = PackedVector2Array(-546.829, -317.692, 537.086, -319.074, 538.304, 287
 wait_time = 10.0
 autostart = true
 
-[connection signal="pressed" from="CanvasLayer/GameOverScreen/PanelContainer/HBoxContainer/Restart" to="." method="_on_restart_pressed"]
+[node name="BackgroundMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_8difk")
+volume_db = -5.0
+autoplay = true
+
 [connection signal="body_entered" from="AttackField" to="." method="_on_attack_field_body_entered"]
 [connection signal="timeout" from="DifficultyTimer" to="." method="_on_difficulty_timer_timeout"]

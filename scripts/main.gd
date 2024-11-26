@@ -30,6 +30,15 @@ var enemy_max_armor = 5
 var enemy_cur_armor = 2
 var enemy_cover_rate = 0
 
+var score = {
+	'wave': 1,
+	'max_chain': 0,
+	'killed': 0,
+	'matched': 0,
+	'coin_gained': 0,
+	'coin_spent': 0
+}
+
 func _ready() -> void:
 	applyLevelStats()
 	
@@ -40,6 +49,7 @@ func _ready() -> void:
 	
 	player.connect('coin_updated', playerCoinUpdated)
 	upgrades_screen.connect('continue_pressed', _on_upgrades_continue_pressed)
+	game_over_screen.connect('restart_pressed', _on_restart_pressed)
 
 func _process(delta: float) -> void:
 	if game_over: 
@@ -52,8 +62,9 @@ func _process(delta: float) -> void:
 		
 	# spawn normal enemy
 	var active_enemies = get_tree().get_node_count_in_group('enemy')
-		
-	if (active_enemies < max_active_enemies):
+	var balance_enemies = required_kills - kills
+	
+	if (active_enemies < min(balance_enemies, max_active_enemies)):
 		var spawn_points = get_tree().get_nodes_in_group('spawn_point')
 		
 		for spawn_point in spawn_points:
@@ -61,6 +72,7 @@ func _process(delta: float) -> void:
 
 func showGameOverScreen(): 
 	game_over = true
+	game_over_screen.init(score)
 	game_over_screen.visible = true
 
 func showUpgradesScreen():
@@ -76,8 +88,11 @@ func spawnEnemy(area):
 			
 	enemy.position = random_pos
 	enemy.connect('death', onEnemyDeath)
+	enemy.connect('matched', onEnemyMatched)
 	enemy.connect('chain_matched', onEnemyChainMatched)
+	
 	add_child(enemy)
+	
 	enemy.init(enemy_cur_armor, enemy_cover_rate)
 			
 func spawnBoss(area):
@@ -121,10 +136,20 @@ func destroyEnemies():
 			boss.queue_free() 
 
 func onEnemyDeath():
+	score.killed += 1
+	
 	kills += 1
 	kills_bar.value = kills
 	
+func onEnemyMatched():
+	score.matched += 1
+	
+	kills += 1
+	kills_bar.value = kills	
+	
 func onEnemyChainMatched(size):
+	score.max_chain = size if size > score.max_chain else score.max_chain
+	
 	combo_counter.visible = true
 	combo_counter.get_node('Timer').start()
 	combo_counter.get_node('Anim').play('idle')
@@ -155,7 +180,9 @@ func applyAcquiredSkill(secrets):
 			# unlock new support units
 			'cactus','plank': pass
 
-func playerCoinUpdated(num):
+func playerCoinUpdated(num, increment):
+	if increment > 0: score.coin_gained += increment
+	elif increment < 0: score.coin_spent += increment
 	player_coins_counter.text = str(num)
 
 func applyLevelStats():
@@ -166,7 +193,6 @@ func applyLevelStats():
 		enemy_cur_armor = min(data.enemy_max_armor, enemy_max_armor)
 		enemy_cover_rate = min(data.enemy_cover_rate, 1)
 		max_active_bosses = min(data.max_active_bosses, 3)
-	
 
 func _on_upgrades_continue_pressed(secrets) -> void:
 	upgrades_screen.visible = false
