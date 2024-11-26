@@ -1,10 +1,12 @@
 extends Node2D
 
-@onready var hit_particle_prefab = load("res://scenes/hit_particle.tscn")
-@onready var obstacle_prefab = load("res://scenes/obstacle.tscn")
-@onready var enemy_prefab = load("res://scenes/enemy.tscn")
-@onready var boss_prefab = load("res://scenes/boss.tscn")
-@onready var hit_rate_prefab = load("res://scenes/hit_rate.tscn")
+var hit_particle_prefab = preload("res://scenes/hit_particle.tscn")
+var obstacle_prefab = preload("res://scenes/obstacle.tscn")
+var enemy_prefab = preload("res://scenes/enemy.tscn")
+var boss_prefab = preload("res://scenes/boss.tscn")
+var hit_rate_prefab = preload("res://scenes/hit_rate.tscn")
+var levels_data = preload("res://scripts/levels_data.gd")
+
 @onready var nav_region = $NavigationRegion2D
 @onready var game_over_screen = $CanvasLayer/GameOverScreen
 @onready var upgrades_screen = $CanvasLayer/SecretScreen
@@ -29,6 +31,8 @@ var enemy_cur_armor = 2
 var enemy_cover_rate = 0
 
 func _ready() -> void:
+	applyLevelStats()
+	
 	kills_bar.max_value = required_kills
 	combo_counter.visible = false
 	game_over_screen.visible = false
@@ -104,10 +108,17 @@ func spawnSupportUnit(target_post, card):
 
 func destroyEnemies():
 	var active_enemies = get_tree().get_nodes_in_group('enemy')
+	var active_bosses = get_tree().get_nodes_in_group('boss')
 	
-	for enemy in active_enemies: 
-		spawnHitParticle(enemy.global_position, 'hit')
-		enemy.queue_free() 
+	if active_enemies.size() > 0:
+		for enemy in active_enemies: 
+			spawnHitParticle(enemy.global_position, 'hit')
+			enemy.queue_free() 
+		
+	if active_bosses.size() > 0:
+		for boss in active_bosses: 
+			spawnHitParticle(boss.global_position, 'hit')
+			boss.queue_free() 
 
 func onEnemyDeath():
 	kills += 1
@@ -147,30 +158,30 @@ func applyAcquiredSkill(secrets):
 func playerCoinUpdated(num):
 	player_coins_counter.text = str(num)
 
+func applyLevelStats():
+	if level <= levels_data.levels.size():
+		var data = levels_data.levels[level - 1]
+		
+		required_kills = data.required_kills
+		enemy_cur_armor = min(data.enemy_max_armor, enemy_max_armor)
+		enemy_cover_rate = min(data.enemy_cover_rate, 1)
+		max_active_bosses = min(data.max_active_bosses, 3)
+	
+
 func _on_upgrades_continue_pressed(secrets) -> void:
 	upgrades_screen.visible = false
 	game_over = false
 	
-	applyAcquiredSkill(secrets)
-	
-	level += 1
+	level = min(level + 1, 10)
 	wave_counter.text = str(level)
+	
+	applyAcquiredSkill(secrets)
+	applyLevelStats()
+	
 	max_active_enemies = 5
-
 	kills = 0
-	required_kills += 25
 	kills_bar.value = kills
 	kills_bar.max_value = required_kills
-	
-	# every 3rd levels, increase enemy armor
-	if level % 3 == 0: 
-		enemy_cur_armor = min(enemy_cur_armor + 1, enemy_max_armor)
-		max_active_bosses = 1 if max_active_bosses <= 0 else 0
-		
-	# every 6th levels, increase chance for enemy to have cover
-	if level % 6 == 0: 
-		enemy_cover_rate = min(enemy_cover_rate + 0.1, 1)
-		max_active_bosses = min(max_active_bosses + 1, 3)
 		
 func _on_restart_pressed() -> void:
 	get_tree().reload_current_scene()
@@ -184,7 +195,7 @@ func _on_difficulty_timer_timeout() -> void:
 	# spawn occasional bosses		
 	var active_bosses = get_tree().get_node_count_in_group('boss')
 	
-	if (randf() <= .5 && active_bosses < max_active_bosses):
+	if (active_bosses < max_active_bosses):
 		var spawn_points = get_tree().get_nodes_in_group('spawn_point')
 		
 		for i in max_active_bosses:

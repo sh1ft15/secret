@@ -12,6 +12,6 @@ func _on_timer_timeout() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group('obstacle'): queue_free()
-	elif body.is_in_group('enemy'):
+	elif body.is_in_group('enemy') or body.is_in_group('boss'):
 		body.triggerHit(false)
 		queue_free()

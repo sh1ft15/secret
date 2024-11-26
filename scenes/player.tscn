@@ -1,10 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dpdy6hqdxypsq"]
+[gd_scene load_steps=8 format=3 uid="uid://dpdy6hqdxypsq"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_vsn0w"]
 [ext_resource type="Texture2D" uid="uid://0kwfh7wtuu34" path="res://sprites/base.png" id="2_kbwdy"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5vtr2"]
-radius = 50.0
+radius = 70.0
 
 [sub_resource type="Animation" id="Animation_wu54r"]
 length = 0.001
@@ -34,12 +34,29 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5, 1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(0.35, 0.35), Vector2(0.34, 0.35), Vector2(0.35, 0.35)]
+"values": [Vector2(0.35, 0.35), Vector2(0.32, 0.34), Vector2(0.35, 0.35)]
+}
+
+[sub_resource type="Animation" id="Animation_81wkw"]
+resource_name = "hurt"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Icon:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.35, 0.35), Vector2(0.32, 0.32), Vector2(0.36, 0.36), Vector2(0.35, 0.35)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_bmf36"]
 _data = {
 "RESET": SubResource("Animation_wu54r"),
+"hurt": SubResource("Animation_81wkw"),
 "idle": SubResource("Animation_y3fjo")
 }
 
@@ -55,10 +72,12 @@ radius = 20.0
 
 [node name="Icon" type="Sprite2D" parent="."]
 z_index = 1
+position = Vector2(0, 52)
 scale = Vector2(0.35, 0.35)
 texture = ExtResource("2_kbwdy")
+offset = Vector2(0, -148.571)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="Anim" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_bmf36")
 }
@@ -67,5 +86,9 @@ libraries = {
 wait_time = 3.0
 autostart = true
 
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+pitch_scale = 1.5
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="timeout" from="BulletTimer" to="." method="_on_bullet_timer_timeout"]

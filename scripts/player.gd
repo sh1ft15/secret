@@ -1,9 +1,13 @@
 extends Area2D
 
+var bug_death_sound = preload("res://audios/bug_death.wav")
+
 @onready var bullet_prefab = load("res://scenes/bullet.tscn") 
 @onready var sprite = $Icon
-@onready var animator = $AnimationPlayer
+@onready var animator = $Anim
 @onready var bullet_timer = $BulletTimer
+@onready var audio = $AudioStreamPlayer2D
+
 @export var heart_container: BoxContainer
 @export var cursor : Area2D
 
@@ -15,13 +19,17 @@ var is_death = false
 var max_health = 6
 var health = 2
 
-var cur_num = 30
+var cur_num = 5
 
 var shoot_rate = 1
 var shoot_amount = 1
 
+# when in passive mode, stack bullets
+var bullet_stored = 0
+
 func _ready() -> void:
 	animator.play('idle')
+	setNum(0)
 	updateHealth(0)
 
 func setNum(num): 
@@ -43,11 +51,13 @@ func updateShootRate(num):
 func updateShootAmount(num):
 	shoot_amount = roundi(max(min(shoot_amount + num, 6), 0))
 
-func isDeath(): return is_death
+func isDeath(): return is_death	
 
 func triggerHit():
 	is_hit = true
 	sprite.modulate = Color(1, 0, 0, .7)
+	animator.play('hurt')
+	playAudio(bug_death_sound)
 	
 	await get_tree().create_timer(2).timeout
 	
@@ -72,29 +82,47 @@ func isInViewPort(post):
 
 func _on_body_entered(body: Node2D) -> void:
 	if is_hit || is_death: return
-	if body.is_in_group('enemy'):
+	if body.is_in_group('enemy') or body.is_in_group('boss'):
 		updateHealth(-1)
 		triggerHit()
+		
 		is_death = health <= 0
+
+func playAudio(stream, volume = 0):
+	audio.volume_db = volume
+	audio.stream = stream
+	audio.play()
 
 func _on_bullet_timer_timeout() -> void:
 	if cur_num <= 0: return
 	
 	var enemies = get_tree().get_nodes_in_group('enemy')
+	var bosses = get_tree().get_nodes_in_group('boss')
 	var target_enemies = []
+	var target_bosses = []
 	
 	for i in shoot_amount:
 		var max_dist = 500
 		var target_enemy
 		
-		for enemy in enemies: 
-			var cur_dist = position.distance_to(enemy.position)
+		for boss in bosses:
+			var cur_dist = position.distance_to(boss.position)
 			
-			if target_enemies.find(enemy) != -1: continue
+			if target_bosses.find(boss) != -1: continue
 			
-			if cur_dist < max_dist && isInViewPort(enemy.position):
+			if cur_dist < max_dist && isInViewPort(boss.position):
 				max_dist = cur_dist
-				target_enemy = enemy
+				target_enemy = boss
+		
+		if target_enemy == null:	
+			for enemy in enemies: 
+				var cur_dist = position.distance_to(enemy.position)
+				
+				if target_enemies.find(enemy) != -1: continue
+				
+				if cur_dist < max_dist && isInViewPort(enemy.position):
+					max_dist = cur_dist
+					target_enemy = enemy
 		
 		if target_enemy != null and cur_num > 0: 
 			target_enemies.append(target_enemy)
@@ -102,3 +130,7 @@ func _on_bullet_timer_timeout() -> void:
 			
 			setNum(-1)
 			get_tree().current_scene.spawnHitRate(position, -1)
+
+func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+	if event.is_action_pressed("left_mouse_click"):
+		pass

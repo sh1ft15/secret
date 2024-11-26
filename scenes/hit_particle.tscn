@@ -34,7 +34,7 @@ scale_curve = SubResource("CurveTexture_vualx")
 alpha_curve = SubResource("CurveTexture_kpvuj")
 
 [node name="HitParticle" type="GPUParticles2D"]
-z_index = 1
+z_index = 10
 emitting = false
 amount = 10
 process_material = SubResource("ParticleProcessMaterial_03u3j")

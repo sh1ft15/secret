@@ -2,11 +2,13 @@ extends CenterContainer
 
 signal continue_pressed(secrets)
 
-@export var player : Area2D
-@onready var upgrades_data = preload("res://scripts/upgrades_data.gd")
+var upgrades_data = preload("res://scripts/upgrades_data.gd")
+
 @onready var button_container = $PanelContainer/HBoxContainer/GridContainer
 @onready var continue_button = $PanelContainer/HBoxContainer/Continue
 @onready var player_coin = $PanelContainer/HBoxContainer/HBox/Coin
+
+@export var player : Area2D
 
 var acquired_secrets = []
 var cur_secrets = []

@@ -5,6 +5,12 @@ extends CharacterBody2D
 	preload("res://sprites/bush.png")
 ]
 
+var armor_broken_sound = preload("res://audios/armor_broken.wav")
+var bug_death_sound = preload("res://audios/bug_death.wav")
+var bug_match_sound = preload("res://audios/bug_match.wav")
+var click_denied_sound = preload("res://audios/click_denied.wav")
+
+@onready var audio = $AudioStreamPlayer2D
 @onready var label = $Label
 @onready var agent = $NavigationAgent2D
 @onready var sprite = $Base
@@ -52,7 +58,10 @@ func triggerHit(click = false):
 		var damage = 1
 		
 		# no damage for player click if there is no coins
-		if click and player.getNum() <= 0: damage = 0
+		if click and player.getNum() <= 0: 
+			playAudio(click_denied_sound)
+			damage = 0
+			
 		
 		if damage > 0:
 			rand_num -= damage
@@ -64,7 +73,10 @@ func triggerHit(click = false):
 			if rand_num <= 0: 
 				get_tree().current_scene.spawnHitParticle(position, 'blood')
 				sprite.modulate = Color(1, .1, .1)
-			else: get_tree().current_scene.spawnHitParticle(position, 'hit')
+				playAudio(bug_death_sound)
+			else: 
+				get_tree().current_scene.spawnHitParticle(position, 'hit')
+				playAudio(armor_broken_sound)
 	
 	
 	animator.play('hurt')
@@ -86,11 +98,17 @@ func triggerMatch():
 	animator.play('hurt')
 	get_tree().current_scene.spawnHitParticle(position, 'hit')
 	get_tree().current_scene.spawnHitRate(position, 1)
+	playAudio(bug_match_sound, -0.5)
 	
 	await get_tree().create_timer(.1).timeout
 	
 	emit_signal('death')
 	queue_free()
+
+func playAudio(stream, volume = 0):
+	audio.volume_db = volume
+	audio.stream = stream
+	audio.play()
 
 func checkMatches(chains = [self]):	
 	if chains.size() > max_chain: return false
@@ -100,7 +118,8 @@ func checkMatches(chains = [self]):
 	var next_enemy = null
 	
 	for enemy in enemies:
-		if enemy == self or enemy in chains or !enemy.isVunerable(): continue
+		if enemy == self or enemy in chains or enemy.hasCover() or !enemy.isVunerable(): 
+			continue
 		
 		var dist = position.distance_to(enemy.position)
 		
@@ -149,6 +168,7 @@ func setupCover(rate):
 func setVunerable(status): 
 	is_vunerable = status
 	sprite.modulate = Color.WHITE if status else Color(1, 1, 1, .5)
+	cover.get_node("Sprite").modulate = Color.WHITE if status else Color(1, 1, 1, .5)
 	
 func isVunerable(): return is_vunerable	
 	
@@ -163,6 +183,7 @@ func checkCover():
 	else:
 		get_tree().current_scene.spawnHitParticle(cover.global_position, 'hit')
 	
+	playAudio(armor_broken_sound)
 	has_cover = false
 	cover.visible = false
 

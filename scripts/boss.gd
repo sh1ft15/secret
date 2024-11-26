@@ -1,8 +1,13 @@
 extends CharacterBody2D
 
+var armor_broken_sound = preload("res://audios/armor_broken.wav")
+var bug_death_sound = preload("res://audios/bug_death.wav")
+var click_denied_sound = preload("res://audios/click_denied.wav")
+
 @onready var agent = $NavigationAgent2D
 @onready var sprite = $Base
 @onready var animator = $Anim
+@onready var audio = $AudioStreamPlayer2D
 @export var speed = 50
 
 signal death
@@ -30,7 +35,9 @@ func triggerHit(click = false):
 	var damage = 1
 		
 	# no damage for player click if there is no coins
-	if click and player.getNum() <= 0: damage = 0
+	if click and player.getNum() <= 0: 
+		playAudio(click_denied_sound)
+		damage = 0
 	
 	if damage > 0:
 		rand_num -= damage
@@ -41,7 +48,10 @@ func triggerHit(click = false):
 		if rand_num <= 0: 
 			get_tree().current_scene.spawnHitParticle(position, 'blood')
 			sprite.modulate = Color(1, .1, .1)
-		else: get_tree().current_scene.spawnHitParticle(position, 'hit')
+			playAudio(bug_death_sound)
+		else: 
+			get_tree().current_scene.spawnHitParticle(position, 'hit')
+			playAudio(armor_broken_sound)
 		
 	animator.play('hurt')
 
@@ -59,6 +69,11 @@ func setVunerable(status):
 	sprite.modulate = Color.WHITE if status else Color(1, 1, 1, .5)
 	
 func isVunerable(): return is_vunerable	
+
+func playAudio(stream, volume = 0):
+	audio.volume_db = volume
+	audio.stream = stream
+	audio.play()
 
 func _physics_process(delta: float) -> void:
 	var distance = position.distance_to(player.position)
