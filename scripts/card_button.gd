@@ -21,7 +21,7 @@ func init(secret):
 	cost_rect.visible = true
 	
 	cur_secret = secret
-	cur_cost = randi_range(3, 10)
+	cur_cost = randi_range(1, 10)
 	cost_label.text = str(cur_cost)
 
 func open():

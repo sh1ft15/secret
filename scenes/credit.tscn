@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/credit.gd" id="1_qifj8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8wqqm"]
-bg_color = Color(0.454524, 0.454524, 0.454524, 1)
+bg_color = Color(0.372549, 0.498039, 0.305882, 1)
 border_color = Color(0.903598, 0.903598, 0.903598, 1)
 shadow_size = 5
 shadow_offset = Vector2(5, 5)
@@ -42,7 +42,7 @@ anchor_bottom = 0.5
 offset_left = -250.0
 offset_top = -125.0
 offset_right = 250.0
-offset_bottom = 125.0
+offset_bottom = 175.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8wqqm")
@@ -60,7 +60,7 @@ offset_right = 74.0
 offset_bottom = 42.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 35
 
 [node name="Title" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
@@ -87,6 +87,6 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_p4rr5")
 theme_override_font_sizes/font_size = 30
-text = "Back to Game"
+text = "Main Menu"
 
 [connection signal="pressed" from="Panel/VBoxContainer/Button" to="." method="_on_button_pressed"]
