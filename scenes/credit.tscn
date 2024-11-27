@@ -89,4 +89,9 @@ theme_override_fonts/font = ExtResource("1_p4rr5")
 theme_override_font_sizes/font_size = 30
 text = "Main Menu"
 
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+volume_db = -2.0
+pitch_scale = 2.0
+
+[connection signal="mouse_entered" from="Panel/VBoxContainer/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Panel/VBoxContainer/Button" to="." method="_on_button_pressed"]

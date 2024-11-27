@@ -71,7 +71,7 @@ func setVunerable(status):
 func isVunerable(): return is_vunerable	
 
 func playAudio(stream, volume = 0):
-	audio.volume_db = volume
+	audio.volume_db = get_tree().current_scene.getSFXVolume(true)
 	audio.stream = stream
 	audio.play()
 

@@ -89,8 +89,8 @@ func _on_body_entered(body: Node2D) -> void:
 		
 		is_death = health <= 0
 
-func playAudio(stream, volume = 0):
-	audio.volume_db = volume
+func playAudio(stream):
+	audio.volume_db = get_tree().current_scene.getSFXVolume(true)
 	audio.stream = stream
 	audio.play()
 

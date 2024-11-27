@@ -98,15 +98,15 @@ func triggerMatch():
 	animator.play('hurt')
 	get_tree().current_scene.spawnHitParticle(position, 'hit')
 	get_tree().current_scene.spawnHitRate(position, 1)
-	playAudio(bug_match_sound, -0.5)
+	playAudio(bug_match_sound)
 	
 	await get_tree().create_timer(.1).timeout
 	
 	emit_signal('matched')
 	queue_free()
 
-func playAudio(stream, volume = 0):
-	audio.volume_db = volume
+func playAudio(stream):
+	audio.volume_db = get_tree().current_scene.getSFXVolume(true)
 	audio.stream = stream
 	audio.play()
 

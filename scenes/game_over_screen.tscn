@@ -1,10 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://cc6gcl8dv6725"]
+[gd_scene load_steps=7 format=3 uid="uid://cc6gcl8dv6725"]
 
 [ext_resource type="Script" path="res://scripts/game_over_screen.gd" id="1_fywxd"]
 [ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="2_nbasg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6tj23"]
-bg_color = Color(0.972549, 0.972549, 0.92549, 1)
+bg_color = Color(0.372549, 0.498039, 0.305882, 1)
 expand_margin_left = 20.0
 expand_margin_top = 20.0
 expand_margin_right = 20.0
@@ -28,9 +28,6 @@ font = ExtResource("2_nbasg")
 font_size = 25
 outline_size = 6
 outline_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d1s5v"]
-bg_color = Color(0, 0, 0, 1)
 
 [node name="GameOverScreen" type="CenterContainer"]
 anchors_preset = 8
@@ -144,7 +141,6 @@ horizontal_alignment = 2
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_nbasg")
 theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_d1s5v")
 text = "RESTART
 "
 

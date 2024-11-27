@@ -10,10 +10,12 @@ var levels_data = preload("res://scripts/levels_data.gd")
 @onready var nav_region = $NavigationRegion2D
 @onready var game_over_screen = $CanvasLayer/GameOverScreen
 @onready var upgrades_screen = $CanvasLayer/SecretScreen
+@onready var option_screen = $CanvasLayer/OptionScreen
 @onready var kills_bar = $CanvasLayer/ProgressBar
 @onready var combo_counter = $CanvasLayer/ComboCounter
 @onready var wave_counter = $CanvasLayer/Level/Num
 @onready var player_coins_counter = $CanvasLayer/Coins/Num
+@onready var bgm_audio = $BackgroundMusic
 @onready var player = $Player
 
 var game_over = false
@@ -29,6 +31,11 @@ var required_kills = 50
 var enemy_max_armor = 5
 var enemy_cur_armor = 2
 var enemy_cover_rate = 0
+
+var settings = {
+	'sfx': 1,
+	'bgm': 1
+}
 
 var score = {
 	'wave': 1,
@@ -50,6 +57,11 @@ func _ready() -> void:
 	player.connect('coin_updated', playerCoinUpdated)
 	upgrades_screen.connect('continue_pressed', _on_upgrades_continue_pressed)
 	game_over_screen.connect('restart_pressed', _on_restart_pressed)
+	
+	setupOptionScreen()
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("escape"): toggleOptionScreen()
 
 func _process(delta: float) -> void:
 	if game_over: 
@@ -69,6 +81,16 @@ func _process(delta: float) -> void:
 		
 		for spawn_point in spawn_points:
 			spawnEnemy(spawn_point)
+
+func setupOptionScreen():
+	settings.bgm = db_to_linear(bgm_audio.volume_db)
+	option_screen.init(settings)
+	option_screen.connect('back_pressed', toggleOptionScreen)
+	option_screen.connect('sfx_updated', sfxVolumeUpdated)
+	option_screen.connect('bgm_updated', bgmVolumeUpdated)
+
+func toggleOptionScreen():
+	option_screen.visible = !option_screen.visible
 
 func showGameOverScreen(): 
 	game_over = true
@@ -193,6 +215,14 @@ func applyLevelStats():
 		enemy_cur_armor = min(data.enemy_max_armor, enemy_max_armor)
 		enemy_cover_rate = min(data.enemy_cover_rate, 1)
 		max_active_bosses = min(data.max_active_bosses, 3)
+
+func sfxVolumeUpdated(volume): settings.sfx = volume
+
+func getSFXVolume(db = false): 
+	return linear_to_db(settings.sfx) if db else settings.sfx
+
+func bgmVolumeUpdated(volume):
+	bgm_audio.volume_db = linear_to_db(volume)
 
 func _on_upgrades_continue_pressed(secrets) -> void:
 	upgrades_screen.visible = false

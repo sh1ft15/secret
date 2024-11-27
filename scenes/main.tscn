@@ -1,8 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://bm3yot7h8v3c5"]
+[gd_scene load_steps=18 format=3 uid="uid://bm3yot7h8v3c5"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3doha"]
 [ext_resource type="PackedScene" uid="uid://dpdy6hqdxypsq" path="res://scenes/player.tscn" id="2_s43kx"]
 [ext_resource type="PackedScene" uid="uid://cc6gcl8dv6725" path="res://scenes/game_over_screen.tscn" id="3_n78lo"]
+[ext_resource type="PackedScene" uid="uid://cqlobr8nugp03" path="res://scenes/option_screen.tscn" id="4_5aekh"]
 [ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="5_dkiys"]
 [ext_resource type="PackedScene" uid="uid://cq8nyfcvs6rxv" path="res://scenes/upgrade_screen.tscn" id="5_do4jj"]
 [ext_resource type="PackedScene" uid="uid://8ilowit2o8th" path="res://scenes/spawn_point.tscn" id="5_pmoai"]
@@ -60,6 +61,10 @@ visible = false
 player = NodePath("../../Player")
 
 [node name="GameOverScreen" parent="CanvasLayer" instance=ExtResource("3_n78lo")]
+visible = false
+
+[node name="OptionScreen" parent="CanvasLayer" instance=ExtResource("4_5aekh")]
+visible = false
 
 [node name="Hearts" type="HBoxContainer" parent="CanvasLayer"]
 offset_right = 300.0
@@ -220,7 +225,7 @@ autostart = true
 
 [node name="BackgroundMusic" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("10_8difk")
-volume_db = -5.0
+volume_db = -10.0
 autoplay = true
 
 [connection signal="body_entered" from="AttackField" to="." method="_on_attack_field_body_entered"]
