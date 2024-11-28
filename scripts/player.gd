@@ -20,7 +20,7 @@ var is_death = false
 var max_health = 6
 var health = 2
 
-var cur_num = 5
+var cur_num = 30
 
 var shoot_rate = 1
 var shoot_amount = 1

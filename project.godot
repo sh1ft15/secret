@@ -14,7 +14,8 @@ config/name="secret"
 run/main_scene="res://scenes/menu.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 boot_splash/show_image=false
-config/icon="res://sprites/icon.svg"
+boot_splash/image="res://sprites/box.png"
+config/icon="res://sprites/plank.png"
 
 [display]
 
@@ -38,3 +39,4 @@ escape={
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.175634, 0.33209, 0.172286, 1)

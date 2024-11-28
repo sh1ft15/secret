@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bm3yot7h8v3c5"]
+[gd_scene load_steps=19 format=3 uid="uid://bm3yot7h8v3c5"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3doha"]
 [ext_resource type="PackedScene" uid="uid://dpdy6hqdxypsq" path="res://scenes/player.tscn" id="2_s43kx"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://d10ipi3fnyhu8" path="res://scenes/combo_counter.tscn" id="7_g65kh"]
 [ext_resource type="Texture2D" uid="uid://d1ogitxxn23gw" path="res://sprites/coin.png" id="7_rnlwx"]
 [ext_resource type="AudioStream" uid="uid://b4csc5xg28lfa" path="res://audios/game_bg_sound.wav" id="10_8difk"]
+[ext_resource type="PackedScene" uid="uid://bnqkqagqypd1u" path="res://scenes/tree_top.tscn" id="13_18h5h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5nskg"]
 bg_color = Color(0.933333, 0, 0, 1)
@@ -216,6 +217,7 @@ scale = Vector2(70.1395, -47.7391)
 shape = SubResource("RectangleShape2D_0cxqv")
 
 [node name="Polygon2D" type="Polygon2D" parent="AttackField"]
+visible = false
 color = Color(0.0588235, 0.615686, 0.282353, 0.392157)
 polygon = PackedVector2Array(-546.829, -317.692, 537.086, -319.074, 538.304, 287.304, -546.829, 284.542)
 
@@ -227,6 +229,67 @@ autostart = true
 stream = ExtResource("10_8difk")
 volume_db = -10.0
 autoplay = true
+
+[node name="Trees" type="CanvasGroup" parent="."]
+
+[node name="TreeTop" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(64, 47)
+rotation = -2.12725
+
+[node name="TreeTop2" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(258, -1)
+rotation = 0.296524
+
+[node name="TreeTop3" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(443, -1)
+
+[node name="TreeTop4" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(628, -1)
+rotation = -1.83073
+
+[node name="TreeTop5" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(819, 3)
+
+[node name="TreeTop6" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(1011, 10)
+rotation = 0.296524
+
+[node name="TreeTop7" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(1127, 169)
+rotation = -2.12725
+
+[node name="TreeTop8" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(1121, 373)
+rotation = 0.296524
+
+[node name="TreeTop9" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(1097, 582)
+
+[node name="TreeTop10" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(909, 613)
+rotation = -1.83073
+
+[node name="TreeTop11" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(721, 607)
+
+[node name="TreeTop12" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(536, 611)
+rotation = 0.296524
+
+[node name="TreeTop13" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(345, 604)
+rotation = -2.12725
+
+[node name="TreeTop14" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(157, 612)
+rotation = 0.296524
+
+[node name="TreeTop15" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(43, 447)
+
+[node name="TreeTop16" parent="Trees" instance=ExtResource("13_18h5h")]
+position = Vector2(47, 244)
+rotation = -1.83073
 
 [connection signal="body_entered" from="AttackField" to="." method="_on_attack_field_body_entered"]
 [connection signal="timeout" from="DifficultyTimer" to="." method="_on_difficulty_timer_timeout"]
