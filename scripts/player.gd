@@ -14,13 +14,14 @@ var bullet_shoot_sound = preload("res://audios/bullet_shoot.wav")
 
 signal coin_updated(num)
 
+var is_passive = false
 var is_hit = false
 var is_death = false
 
 var max_health = 6
 var health = 2
 
-var cur_num = 30
+var cur_num = 10
 
 var shoot_rate = 1
 var shoot_amount = 1
@@ -32,6 +33,7 @@ func _ready() -> void:
 	animator.play('idle')
 	setNum(0)
 	updateHealth(0)
+	setPassive(is_passive)
 
 func setNum(num): 
 	cur_num = max(cur_num + num, 0)
@@ -59,6 +61,7 @@ func triggerHit():
 	sprite.modulate = Color(1, 0, 0, .7)
 	animator.play('hurt')
 	playAudio(bug_death_sound)
+	get_tree().current_scene.spawnHitParticle(position, 'hit')
 	
 	await get_tree().create_timer(2).timeout
 	
@@ -81,6 +84,18 @@ func shootBullet(target_position):
 func isInViewPort(post):
 	return get_viewport_rect().has_point(post)
 
+func setPassive(status):
+	bullet_timer.start()
+	sprite.frame = 0 if status else 1
+	is_passive = status
+	
+	animator.play('hurt')
+	get_tree().current_scene.spawnHitParticle(position, 'hit')
+	
+	await get_tree().create_timer(.6).timeout
+	
+	animator.play('idle')
+
 func _on_body_entered(body: Node2D) -> void:
 	if is_hit || is_death: return
 	if body.is_in_group('enemy') or body.is_in_group('boss'):
@@ -95,7 +110,12 @@ func playAudio(stream):
 	audio.play()
 
 func _on_bullet_timer_timeout() -> void:
-	if cur_num <= 0: return
+	if cur_num <= 0 || get_tree().current_scene.isGameOver(): return
+	
+	if is_passive:
+		get_tree().current_scene.spawnHitRate(position, 1)
+		setNum(1)
+		return
 	
 	var enemies = get_tree().get_nodes_in_group('enemy')
 	var bosses = get_tree().get_nodes_in_group('boss')
@@ -134,4 +154,4 @@ func _on_bullet_timer_timeout() -> void:
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event.is_action_pressed("left_mouse_click"):
-		pass
+		setPassive(not is_passive)

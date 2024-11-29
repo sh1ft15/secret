@@ -101,6 +101,8 @@ func showUpgradesScreen():
 	game_over = true
 	upgrades_screen.visible = true
 
+func isGameOver(): return game_over
+
 func spawnEnemy(area):
 	var rect = area.get_child(0).shape.get_rect()
 	var x = randi_range(rect.position.x, rect.position.x + rect.size.x)

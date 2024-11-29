@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bm3yot7h8v3c5"]
+[gd_scene load_steps=20 format=3 uid="uid://bm3yot7h8v3c5"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3doha"]
 [ext_resource type="PackedScene" uid="uid://dpdy6hqdxypsq" path="res://scenes/player.tscn" id="2_s43kx"]
@@ -31,6 +31,12 @@ outline_color = Color(0, 0, 0, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_ja1ix"]
 font = ExtResource("5_dkiys")
 font_size = 45
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_gc3px"]
+font = ExtResource("5_dkiys")
+font_size = 100
 outline_size = 10
 outline_color = Color(0, 0, 0, 1)
 
@@ -144,7 +150,7 @@ z_index = 1
 custom_minimum_size = Vector2(30, 80)
 layout_mode = 2
 size_flags_vertical = 1
-text = "30
+text = "10
 "
 label_settings = SubResource("LabelSettings_ja1ix")
 horizontal_alignment = 1
@@ -156,6 +162,22 @@ layout_mode = 2
 texture = ExtResource("7_rnlwx")
 expand_mode = 4
 stretch_mode = 6
+
+[node name="LevelBanner" type="CenterContainer" parent="CanvasLayer"]
+visible = false
+modulate = Color(1, 1, 1, 0.784314)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="CanvasLayer/LevelBanner"]
+layout_mode = 2
+text = "wave 1"
+label_settings = SubResource("LabelSettings_gc3px")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 visible = false
