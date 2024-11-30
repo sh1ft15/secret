@@ -49,6 +49,7 @@ var score = {
 func _ready() -> void:
 	applyLevelStats()
 	
+	bgm_audio
 	kills_bar.max_value = required_kills
 	combo_counter.visible = false
 	game_over_screen.visible = false
@@ -64,23 +65,24 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("escape"): toggleOptionScreen()
 
 func _process(delta: float) -> void:
-	if game_over: 
-		destroyEnemies()
+	if player.isDeath(): 
+		showGameOverScreen()
 		return
-	
-	if player.isDeath(): showGameOverScreen()
-	
-	if kills >= required_kills: showUpgradesScreen()
 		
 	# spawn normal enemy
 	var active_enemies = get_tree().get_node_count_in_group('enemy')
-	var balance_enemies = required_kills - kills
+	var active_bosses = get_tree().get_node_count_in_group('boss')
+	var spawn_count = min((required_kills - kills), max_active_enemies)
 	
-	if (active_enemies < min(balance_enemies, max_active_enemies)):
+	if spawn_count <= 0 and (active_enemies + active_bosses) <= 0: 
+		showUpgradesScreen()
+	elif ((active_enemies + active_bosses) < spawn_count):
 		var spawn_points = get_tree().get_nodes_in_group('spawn_point')
 		
-		for spawn_point in spawn_points:
-			spawnEnemy(spawn_point)
+		spawn_count = min(spawn_count, spawn_points.size())
+		
+		for i in spawn_count: spawnEnemy(spawn_points[i])
+			
 
 func setupOptionScreen():
 	settings.bgm = db_to_linear(bgm_audio.volume_db)
@@ -114,9 +116,7 @@ func spawnEnemy(area):
 	enemy.connect('death', onEnemyDeath)
 	enemy.connect('matched', onEnemyMatched)
 	enemy.connect('chain_matched', onEnemyChainMatched)
-	
 	add_child(enemy)
-	
 	enemy.init(enemy_cur_armor, enemy_cover_rate)
 			
 func spawnBoss(area):
@@ -127,6 +127,7 @@ func spawnBoss(area):
 	var boss = boss_prefab.instantiate()
 	
 	boss.position = random_pos
+	boss.connect('death', onEnemyDeath)
 	add_child(boss)
 	
 func spawnHitParticle(target_post, type):
@@ -200,9 +201,6 @@ func applyAcquiredSkill(secrets):
 			'increase_health': player.updateHealth(1)
 			'increase_shoot_rate': player.updateShootRate(1)
 			'increase_shoot_amount': player.updateShootAmount(1)
-			
-			# unlock new support units
-			'cactus','plank': pass
 
 func playerCoinUpdated(num, increment):
 	if increment > 0: score.coin_gained += increment
@@ -262,3 +260,7 @@ func _on_difficulty_timer_timeout() -> void:
 func _on_attack_field_body_entered(body: Node2D) -> void:
 	if body.is_in_group('enemy') or body.is_in_group('boss'):
 		body.setVunerable(true)
+
+# loop bgm
+func _on_background_music_finished() -> void:
+	bgm_audio.play()

@@ -315,3 +315,4 @@ rotation = -1.83073
 
 [connection signal="body_entered" from="AttackField" to="." method="_on_attack_field_body_entered"]
 [connection signal="timeout" from="DifficultyTimer" to="." method="_on_difficulty_timer_timeout"]
+[connection signal="finished" from="BackgroundMusic" to="." method="_on_background_music_finished"]

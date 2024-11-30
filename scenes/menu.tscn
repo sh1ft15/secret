@@ -97,6 +97,12 @@ theme_override_fonts/font = ExtResource("2_k5you")
 theme_override_font_sizes/font_size = 40
 text = "Start"
 
+[node name="Tutorial" type="Button" parent="Panel/Buttons"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_k5you")
+theme_override_font_sizes/font_size = 30
+text = "Tutorial"
+
 [node name="Credit" type="Button" parent="Panel/Buttons"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_k5you")
@@ -111,5 +117,7 @@ pitch_scale = 2.0
 [connection signal="mouse_exited" from="Panel/Header" to="." method="_on_header_mouse_exited"]
 [connection signal="mouse_entered" from="Panel/Buttons/Start" to="." method="_on_start_mouse_entered"]
 [connection signal="pressed" from="Panel/Buttons/Start" to="." method="_on_start_pressed"]
+[connection signal="mouse_entered" from="Panel/Buttons/Tutorial" to="." method="_on_credit_mouse_entered"]
+[connection signal="pressed" from="Panel/Buttons/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="mouse_entered" from="Panel/Buttons/Credit" to="." method="_on_credit_mouse_entered"]
 [connection signal="pressed" from="Panel/Buttons/Credit" to="." method="_on_credit_pressed"]

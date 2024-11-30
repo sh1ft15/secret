@@ -1,0 +1,138 @@
+[gd_scene load_steps=7 format=3 uid="uid://be5ga5ne2h26l"]
+
+[ext_resource type="Script" path="res://scripts/tutorial_screen.gd" id="1_grd7m"]
+[ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="2_ughds"]
+[ext_resource type="VideoStream" path="res://tutorials/set_bug_death.ogv" id="3_oeki5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ycgn2"]
+bg_color = Color(0.372549, 0.498039, 0.305882, 1)
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+shadow_size = 3
+
+[sub_resource type="LabelSettings" id="LabelSettings_4wj1b"]
+font = ExtResource("2_ughds")
+font_size = 30
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_10nyo"]
+font = ExtResource("2_ughds")
+font_size = 20
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[node name="TutorialScreen" type="Panel"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -275.0
+offset_right = 250.0
+offset_bottom = 275.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ycgn2")
+script = ExtResource("1_grd7m")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_right = 250.0
+offset_bottom = 36.0
+grow_horizontal = 2
+
+[node name="Prev" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_ughds")
+theme_override_font_sizes/font_size = 20
+text = "Prev
+"
+
+[node name="Title" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "test"
+label_settings = SubResource("LabelSettings_4wj1b")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Next" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_ughds")
+theme_override_font_sizes/font_size = 20
+text = "Next
+"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -214.5
+offset_right = 200.0
+offset_bottom = 214.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Row" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="VBoxContainer/Row"]
+layout_mode = 2
+size_flags_vertical = 3
+stream = ExtResource("3_oeki5")
+loop = true
+
+[node name="Desc" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+text = "This is a description.
+test
+test
+test"
+label_settings = SubResource("LabelSettings_10nyo")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="MainMenu" type="Button" parent="."]
+custom_minimum_size = Vector2(150, 30)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -44.0
+offset_right = 100.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_ughds")
+theme_override_font_sizes/font_size = 30
+text = "Main Menu"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+volume_db = -2.0
+pitch_scale = 2.0
+
+[connection signal="mouse_entered" from="HBoxContainer/Prev" to="." method="_on_prev_mouse_entered"]
+[connection signal="pressed" from="HBoxContainer/Prev" to="." method="_on_prev_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/Next" to="." method="_on_next_mouse_entered"]
+[connection signal="pressed" from="HBoxContainer/Next" to="." method="_on_next_pressed"]
+[connection signal="mouse_entered" from="MainMenu" to="." method="_on_main_menu_mouse_entered"]
+[connection signal="pressed" from="MainMenu" to="." method="_on_main_menu_pressed"]

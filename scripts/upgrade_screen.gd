@@ -56,35 +56,6 @@ func getAvailableSecrets():
 	var temp_secrets = upgrades_data.secrets.duplicate(true)
 	var list = []
 	
-	# remove upgrades for support units if not yet unlocked
-	for type in ['plank', 'cactus']:
-		var acquires= acquired_secrets.filter(func(item): 
-			return item.slug == type
-		)
-		
-		if acquires.size() <= 0: 
-			for i in temp_secrets.size() - 1:
-				if temp_secrets[i].slug == 'upgrade_' + type:
-					temp_secrets.remove_at(i)
-				
-	
-	# remove limited repeatable upgrades
-	for secret in upgrades_data.secrets:
-		if typeof(secret.repeatable) == TYPE_INT:
-			var acquires = acquired_secrets.filter(func(item): 
-				return item.slug == secret.slug
-			)
-			
-			if acquires.size() >= secret.repeatable: 
-				temp_secrets.remove(secret)
-	
-	# remove un-repeatable upgrades
-	for secret in acquired_secrets:
-		if typeof(secret.repeatable) == TYPE_BOOL and not secret.repeatable:
-			var index = temp_secrets.find(secret)
-			
-			if index != -1: temp_secrets.remove_at(index)
-	
 	for button in button_container.get_children():
 		var index = randi() % temp_secrets.size()
 		var secret = temp_secrets[index]

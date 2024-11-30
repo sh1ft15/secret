@@ -11,6 +11,9 @@ func _on_start_pressed() -> void:
 func _on_credit_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/credit.tscn")
 
+func _on_tutorial_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/tutorial_screen.tscn")
+
 func _on_credit_mouse_entered() -> void:
 	playAudio(button_entered)
 
