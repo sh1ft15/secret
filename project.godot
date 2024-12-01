@@ -11,11 +11,12 @@ config_version=5
 [application]
 
 config/name="secret"
+config/version="1.0"
 run/main_scene="res://scenes/menu.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 boot_splash/show_image=false
-boot_splash/image="res://sprites/box.png"
-config/icon="res://sprites/plank.png"
+boot_splash/image="res://sprites/cactus.png"
+config/icon="res://sprites/cactus.png"
 
 [display]
 
