@@ -81,6 +81,14 @@ horizontal_alignment = 1
 layout_mode = 2
 text = "Background Music - Yay by Sakura Girl"
 label_settings = SubResource("LabelSettings_iljkj")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Credit_3" type="Label" parent="Panel/VBoxContainer/List"]
+layout_mode = 2
+text = "Font - Ruthless Sketch by GGBotNet"
+label_settings = SubResource("LabelSettings_iljkj")
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Button" type="Button" parent="Panel/VBoxContainer"]

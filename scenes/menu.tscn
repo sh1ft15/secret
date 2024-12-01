@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://scripts/menu.gd" id="1_3jl6y"]
 [ext_resource type="FontFile" uid="uid://0jrk3kh3t8wc" path="res://fonts/RuthlessSketch-q2xD6.ttf" id="2_k5you"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8wqqm"]
-bg_color = Color(0.374147, 0.497129, 0.306273, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0t6ep"]
+bg_color = Color(0.372549, 0.498039, 0.305882, 1)
 border_color = Color(0.903598, 0.903598, 0.903598, 1)
 shadow_size = 5
 shadow_offset = Vector2(5, 5)
@@ -45,7 +45,7 @@ offset_right = 250.0
 offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_8wqqm")
+theme_override_styles/panel = SubResource("StyleBoxFlat_0t6ep")
 
 [node name="Header" type="VBoxContainer" parent="Panel"]
 layout_mode = 1

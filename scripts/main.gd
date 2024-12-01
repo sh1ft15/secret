@@ -94,14 +94,17 @@ func setupOptionScreen():
 func toggleOptionScreen():
 	option_screen.visible = !option_screen.visible
 
-func showGameOverScreen(): 
+func showGameOverScreen(complete = false): 
 	game_over = true
-	game_over_screen.init(score)
+	game_over_screen.init(score, complete)
 	game_over_screen.visible = true
 
 func showUpgradesScreen():
-	game_over = true
-	upgrades_screen.visible = true
+	if level == 10: showGameOverScreen(true)
+	else:
+		game_over = true
+		upgrades_screen.visible = true
+		upgrades_screen.init(score)
 
 func isGameOver(): return game_over
 
@@ -230,6 +233,7 @@ func _on_upgrades_continue_pressed(secrets) -> void:
 	
 	level = min(level + 1, 10)
 	wave_counter.text = str(level)
+	score.wave = level
 	
 	applyAcquiredSkill(secrets)
 	applyLevelStats()

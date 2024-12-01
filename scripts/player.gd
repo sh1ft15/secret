@@ -2,6 +2,7 @@ extends Area2D
 
 var bug_death_sound = preload("res://audios/bug_death.wav")
 var bullet_shoot_sound = preload("res://audios/bullet_shoot.wav")
+var bug_match_sound = preload("res://audios/bug_match.wav")
 
 @onready var bullet_prefab = load("res://scenes/bullet.tscn") 
 @onready var sprite = $Icon
@@ -48,8 +49,8 @@ func updateHealth(num):
 		heart_container.get_child(i).visible = (i + 1) <= health
 	
 func updateShootRate(num):
-	shoot_rate = max(min(shoot_rate + num, 5), 1)
-	bullet_timer.wait_time = max(3 - ((shoot_rate / 5) * 3), .5)
+	shoot_rate = max(min(shoot_rate + num, 6), 1)
+	bullet_timer.wait_time = max(3 - ((shoot_rate / 6) * 3), .5)
 	
 func updateShootAmount(num):
 	shoot_amount = roundi(max(min(shoot_amount + num, 6), 0))
@@ -90,6 +91,7 @@ func setPassive(status):
 	is_passive = status
 	
 	animator.play('hurt')
+	playAudio(bug_match_sound)
 	get_tree().current_scene.spawnHitParticle(position, 'hit')
 	
 	await get_tree().create_timer(.6).timeout
@@ -113,14 +115,13 @@ func _on_bullet_timer_timeout() -> void:
 	if cur_num <= 0 || get_tree().current_scene.isGameOver(): return
 	
 	if is_passive:
-		get_tree().current_scene.spawnHitRate(position, 1)
-		setNum(1)
+		get_tree().current_scene.spawnHitRate(position, shoot_amount)
+		setNum(shoot_amount)
 		return
 	
 	var enemies = get_tree().get_nodes_in_group('enemy')
 	var bosses = get_tree().get_nodes_in_group('boss')
 	var target_enemies = []
-	var target_bosses = []
 	
 	for i in shoot_amount:
 		var max_dist = 500
@@ -129,7 +130,7 @@ func _on_bullet_timer_timeout() -> void:
 		for boss in bosses:
 			var cur_dist = position.distance_to(boss.position)
 			
-			if target_bosses.find(boss) != -1: continue
+			if target_enemies.find(boss) != -1: continue
 			
 			if cur_dist < max_dist && isInViewPort(boss.position):
 				max_dist = cur_dist
@@ -145,12 +146,14 @@ func _on_bullet_timer_timeout() -> void:
 					max_dist = cur_dist
 					target_enemy = enemy
 		
-		if target_enemy != null and cur_num > 0: 
-			target_enemies.append(target_enemy)
-			shootBullet(target_enemy.position)
-			
-			setNum(-1)
-			get_tree().current_scene.spawnHitRate(position, -1)
+		if target_enemy != null: target_enemies.append(target_enemy)
+
+	for enemy in target_enemies:
+		if cur_num <= 0: break
+		
+		shootBullet(enemy.position)
+		setNum(-1)
+		get_tree().current_scene.spawnHitRate(position, -1)
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event.is_action_pressed("left_mouse_click"):

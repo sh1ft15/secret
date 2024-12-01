@@ -52,7 +52,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_6tj23")
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="PanelContainer/Column"]
+[node name="Title" type="Label" parent="PanelContainer/Column"]
 layout_mode = 2
 text = "GAME OVER
 "

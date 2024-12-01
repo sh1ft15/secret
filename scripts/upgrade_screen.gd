@@ -4,6 +4,7 @@ signal continue_pressed(secrets)
 
 var upgrades_data = preload("res://scripts/upgrades_data.gd")
 
+@onready var title_label = $PanelContainer/HBoxContainer/HBox/Title
 @onready var button_container = $PanelContainer/HBoxContainer/GridContainer
 @onready var continue_button = $PanelContainer/HBoxContainer/Continue
 @onready var player_coin = $PanelContainer/HBoxContainer/HBox/Coin
@@ -19,6 +20,9 @@ func _ready() -> void:
 		button.connect('card_button_pressed', reveal)
 		
 	reset()
+
+func init(score):
+	title_label.text = 'Wave ' + str(score.wave) + ' Completed'
 
 func reveal(card):
 	if player.getNum() >= card.getCost(): 

@@ -13,12 +13,12 @@ const secrets = [
 	},
 	{
 		'slug': 'increase_shoot_rate', 
-		'desc': 'Earn coin faster / Shoot faster', 
-		'sprite': preload('res://sprites/heart.png')
+		'desc': 'Earn coin / Shoot faster', 
+		'sprite': preload('res://sprites/upgrade_more_coin.png')
 	},
 	{
 		'slug': 'increase_shoot_amount', 
-		'desc': 'Shoot more coin',
-		'sprite': preload('res://sprites/heart.png')
+		'desc': 'Earn / Shoot more coin',
+		'sprite': preload('res://sprites/upgrade_more_coin.png')
 	}
 ]

@@ -1,5 +1,6 @@
 extends CenterContainer
 
+@onready var title_label = $PanelContainer/Column/Title
 @onready var max_chain_label = $PanelContainer/Column/Scores/MaxChain/Num
 @onready var killed_label = $PanelContainer/Column/Scores/BugKilled/Num
 @onready var matched_label = $PanelContainer/Column/Scores/BugMatched/Num
@@ -8,7 +9,10 @@ extends CenterContainer
 
 signal restart_pressed
 
-func init(score):
+func init(score, complete = false):
+	if complete: title_label.text = 'Stage completed'
+	else: title_label.text = 'Game over'
+	
 	max_chain_label.text = str(score.max_chain)
 	killed_label.text = str(score.killed)
 	matched_label.text = str(score.matched)

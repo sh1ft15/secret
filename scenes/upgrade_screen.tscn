@@ -15,7 +15,7 @@ shadow_size = 3
 
 [sub_resource type="LabelSettings" id="LabelSettings_kp0ta"]
 font = ExtResource("1_beswm")
-font_size = 40
+font_size = 35
 outline_size = 10
 outline_color = Color(0, 0, 0, 1)
 
@@ -57,7 +57,7 @@ layout_mode = 2
 [node name="Title" type="Label" parent="PanelContainer/HBoxContainer/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "secret shop"
+text = "Wave nth completed"
 label_settings = SubResource("LabelSettings_kp0ta")
 
 [node name="Coin" type="Label" parent="PanelContainer/HBoxContainer/HBox"]

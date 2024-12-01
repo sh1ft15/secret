@@ -19,7 +19,7 @@ bg_color = Color(0.585062, 0.585062, 0.585062, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_d38uf"]
 font = ExtResource("2_5yr25")
-font_size = 18
+font_size = 20
 
 [sub_resource type="LabelSettings" id="LabelSettings_bb6yc"]
 font = ExtResource("2_5yr25")
@@ -28,11 +28,11 @@ outline_size = 10
 outline_color = Color(0, 0, 0, 1)
 
 [node name="CardButton" type="Button"]
-custom_minimum_size = Vector2(230, 280)
+custom_minimum_size = Vector2(200, 250)
 offset_left = -1.0
 offset_top = -3.0
-offset_right = 229.0
-offset_bottom = 277.0
+offset_right = 199.0
+offset_bottom = 247.0
 theme_override_styles/disabled = SubResource("StyleBoxFlat_0qycs")
 theme_override_styles/hover = SubResource("StyleBoxFlat_8vwgg")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_0nxit")
