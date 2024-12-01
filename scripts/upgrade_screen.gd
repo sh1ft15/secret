@@ -25,6 +25,8 @@ func init(score):
 	title_label.text = 'Wave ' + str(score.wave) + ' Completed'
 
 func reveal(card):
+	if card.isOpen(): return
+	
 	if player.getNum() >= card.getCost(): 
 		player.setNum(card.getCost() * -1)
 		card.open()

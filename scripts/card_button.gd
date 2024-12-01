@@ -9,6 +9,7 @@ extends Button
 
 var cur_secret = null
 var cur_cost = 0
+var is_open = false
 
 signal card_button_pressed(button)
 
@@ -16,6 +17,7 @@ func init(secret):
 	modulate = Color.WHITE
 	disabled = false
 	
+	is_open = false
 	sprite.texture = default_icon
 	desc_rect.visible = false
 	cost_rect.visible = true
@@ -29,6 +31,10 @@ func open():
 	desc_label.text = cur_secret.desc
 	cost_rect.visible = false
 	desc_rect.visible = true
+	is_open = true
+	
+
+func isOpen(): return is_open
 
 func setAffordable(status):
 	cost_label.modulate = Color.WHITE if status else Color.RED
